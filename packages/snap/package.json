@@ -26,6 +26,11 @@
     "serve": "mm-snap serve",
     "start": "mm-snap watch"
   },
+  "dependencies": {
+    "@xmtp/proto": "file:../../../proto",
+    "@xmtp/xmtp-js": "file:../../../xmtp-js-sdk",
+    "buffer": "^6.0.3"
+  },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",
     "@metamask/auto-changelog": "^2.6.0",
