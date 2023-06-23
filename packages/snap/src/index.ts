@@ -32,7 +32,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     const approved = await snap.request({
       method: 'snap_dialog',
       params: {
-        type: 'Confirmation',
+        type: 'confirmation',
         content: panel([
           heading(`Connection request`),
           text(
