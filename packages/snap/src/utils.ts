@@ -7,13 +7,14 @@ import {
   PrivateKeyBundleV1,
 } from '@xmtp/xmtp-js';
 import { privateKey } from '@xmtp/proto';
-import SnapHandler from './handler';
+import SnapHandler from './handlers';
 import SnapPersistence from './persistence';
-import type { SnapRequest } from './handler';
+import type { SnapRequest } from './handlers';
+import type { SnapMeta } from './index';
+import type { XmtpEnv } from '@xmtp/xmtp-js';
 
-let _handler: ReturnType<typeof SnapHandler> | undefined;
-
-type XmtpEnv = 'local' | 'dev' | 'production';
+// Mapping of keystore identifiers ($walletAddress/$env) to handlers
+const handlers = new Map<string, ReturnType<typeof SnapHandler>>();
 
 export async function getKeys(persistence: Persistence) {
   const keys = await persistence.getItem(`keys`);
@@ -32,14 +33,16 @@ export function setKeys(persistence: Persistence, keys: PrivateKeyBundleV1) {
 }
 
 export async function getHandler(address: string, env: XmtpEnv) {
-  if (!_handler) {
+  const key = buildKey(address, env);
+  if (!handlers.has(key)) {
+    console.log(`Adding handler to cache for key ${key}`);
     const persistence = getPersistence(address, env);
     const keys = await getKeys(persistence);
     const keyStore = await InMemoryKeystore.create(keys, persistence);
-    // eslint-disable-next-line require-atomic-updates
-    _handler = SnapHandler(keyStore);
+    handlers.set(key, SnapHandler(keyStore));
   }
-  return _handler;
+
+  return handlers.get(key);
 }
 
 export function getPersistence(address: string, env: XmtpEnv) {
@@ -49,44 +52,15 @@ export function getPersistence(address: string, env: XmtpEnv) {
   );
 }
 
-export function setHandler(keystore: InMemoryKeystore) {
-  _handler = SnapHandler(keystore);
-}
-
-export function getSigner() {
-  return {
-    getAddress: async () => {
-      const accounts = (await ethereum.request({
-        method: 'eth_requestAccounts',
-      })) as string[];
-      return accounts[0];
-    },
-    signMessage: async (message: ArrayLike<number> | string) => {
-      const accounts = (await ethereum.request({
-        method: 'eth_requestAccounts',
-      })) as string[];
-      const firstAccount = accounts[0];
-      return ethereum.request({
-        method: 'personal_sign',
-        params: [message, firstAccount],
-      }) as Promise<string>;
-    },
-  };
-}
-
-export async function bootstrapKeystore(env: XmtpEnv) {
-  const signer = getSigner();
-  const client = await Client.create(signer, { env });
-  const keys = new PrivateKeyBundleV1(
-    await client.keystore.getPrivateKeyBundle(),
-  );
-  const persistence = getPersistence(client.address, env);
-  await setKeys(persistence, keys);
-  return InMemoryKeystore.create(keys, persistence);
-}
-
 export function isSnapRequest(params: any): params is SnapRequest {
-  return Boolean(params) && params.req !== undefined;
+  return (
+    Boolean(params) &&
+    // Expect that params.req is not undefined. BUT it may be null for certain request types
+    params.req !== undefined &&
+    typeof params.meta === 'object' &&
+    params.meta.env &&
+    params.meta.walletAddress
+  );
 }
 
 export const truncate = (str: string | undefined, length: number): string => {
@@ -100,3 +74,7 @@ export const truncate = (str: string | undefined, length: number): string => {
 
   return str;
 };
+
+function buildKey(address: string, env: XmtpEnv) {
+  return `${address}/${env}`;
+}

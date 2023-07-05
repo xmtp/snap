@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@metamask/providers": "^9.0.0",
+    "@xmtp/bot-starter": "^1.0.2",
+    "@xmtp/xmtp-js": "^9.1.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",

@@ -2,14 +2,14 @@
 import './polyfills'; // eslint-disable-line import/no-unassigned-import
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { panel, text, heading } from '@metamask/snaps-ui';
-import {
-  getHandler,
-  setHandler,
-  bootstrapKeystore,
-  getSigner,
-  isSnapRequest,
-  truncate,
-} from './utils';
+import { isSnapRequest } from './utils';
+import { type XmtpEnv } from '@xmtp/xmtp-js';
+import { initKeystore, getKeystoreStatus } from './handlers';
+
+export type SnapMeta = {
+  walletAddress: string;
+  env: XmtpEnv;
+};
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -25,46 +25,24 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
   request,
 }) => {
-  console.log('Method', request.method, 'params', request.params);
-  const signer = getSigner();
-  if (request.method === 'init') {
-    const address = await signer.getAddress();
-    const approved = await snap.request({
-      method: 'snap_dialog',
-      params: {
-        type: 'confirmation',
-        content: panel([
-          heading(`Connection request`),
-          text(
-            `This will allow ${origin} to read and write messages on behalf of ${truncate(
-              address,
-              12,
-            )}`,
-          ),
-        ]),
-      },
-    });
-
-    if (!approved) {
-      throw new Error('Not approved!');
-    }
-
-    try {
-      await getHandler(address, 'dev');
-      console.log('Got a handler from stored keys');
-    } catch (e) {
-      console.log('Could not get handler', e);
-      setHandler(await bootstrapKeystore('dev'));
-    }
-
-    return {
-      address,
-    };
+  // Validate that the request has the expected fields, which are set on all requests from `xmtp-js`
+  if (!isSnapRequest(request.params)) {
+    throw new Error('not a valid snap request');
   }
 
-  const handler = await getHandler(await signer.getAddress(), 'dev');
-  if (request.method in handler && isSnapRequest(request.params)) {
-    return handler[request.method as keyof typeof handler](request.params);
+  // Unauthenticated methods:
+  if (request.method === 'initKeystore') {
+    return initKeystore(request.params);
   }
+
+  if (request.method === 'getKeystoreStatus') {
+    return getKeystoreStatus(request.params);
+  }
+
+  // Authenticated methods
+  // const handler = await getHandler();
+  // if (request.method in handler && isSnapRequest(request.params)) {
+  //   return handler[request.method as keyof typeof handler](request.params);
+  // }
   throw new Error('Invalid method');
 };
