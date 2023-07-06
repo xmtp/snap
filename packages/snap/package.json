@@ -28,6 +28,15 @@
     "pretest": "yarn build",
     "test": "jest"
   },
+  "release": {
+    "branches": [
+      "main",
+      {
+        "name": "beta",
+        "prerelease": true
+      }
+    ]
+  },
   "dependencies": {
     "@xmtp/proto": "^3.26.0",
     "@xmtp/xmtp-js": "9.1.0-snap.5",
@@ -67,6 +76,7 @@
   },
   "publishConfig": {
     "access": "public",
+    "provenance": true,
     "registry": "https://registry.npmjs.org/"
   }
 }

@@ -3,10 +3,16 @@ on:
   push:
     branches:
       - main
+      - beta
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+      issues: write
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -16,6 +22,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
+      - name: Use latest NPM
+        # Ensure we are using the latest version of NPM to get support for provenance
+        run: npm i -g npm
       - name: Install dependencies
         working-directory: packages/snap
         run: npm ci
