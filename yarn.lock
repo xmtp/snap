@@ -2575,6 +2575,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@metamask/auto-changelog@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@metamask/auto-changelog@npm:3.1.0"
+  dependencies:
+    diff: ^5.0.0
+    execa: ^5.1.1
+    semver: ^7.3.5
+    yargs: ^17.0.1
+  bin:
+    auto-changelog: dist/cli.js
+  checksum: cd3c833100c19a80e0b7ae8c174fbbe225700eef5fbabd9b0d6c4b439c8af839792111a17d9ddf2e1939839736413afd7402d2cc08ece373622b5a410da5e9fe
+  languageName: node
+  linkType: hard
+
 "@metamask/eslint-config-jest@npm:^10.0.0":
   version: 10.0.0
   resolution: "@metamask/eslint-config-jest@npm:10.0.0"
@@ -2770,6 +2784,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@metamask/template-snap-monorepo@workspace:."
   dependencies:
+    "@metamask/auto-changelog": ^3.1.0
     "@metamask/eslint-config": ^10.0.0
     "@metamask/eslint-config-jest": ^10.0.0
     "@metamask/eslint-config-nodejs": ^10.0.0
@@ -4705,13 +4720,13 @@ __metadata:
 
 "@xmtp/proto@file:../../../proto::locator=snap%40workspace%3Apackages%2Fsnap":
   version: 0.0.0-development
-  resolution: "@xmtp/proto@file:../../../proto#../../../proto::hash=e9a264&locator=snap%40workspace%3Apackages%2Fsnap"
+  resolution: "@xmtp/proto@file:../../../proto#../../../proto::hash=c04b86&locator=snap%40workspace%3Apackages%2Fsnap"
   dependencies:
     long: ^5.2.0
     protobufjs: ^7.0.0
     rxjs: ^7.8.0
     undici: ^5.8.1
-  checksum: 9c46754ba7f7fa710eab6cba2152fbb1225e550438e37f5a7412a82df66685db2814fe10e5d5450f8a9b265163ae1c2bb047bbfa0c4cd0549c041b8873ee0719
+  checksum: 1dbe51171040582ff943c1a83bdc1cd564dd96d43d247dc728d006a75aced903fbde1fd9653784e3c258496d63f9d33a9c3ba7ac7b30dac5655dc13046625673
   languageName: node
   linkType: hard
 
@@ -4727,19 +4742,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xmtp/proto@npm:^3.26.0":
+  version: 3.26.0
+  resolution: "@xmtp/proto@npm:3.26.0"
+  dependencies:
+    long: ^5.2.0
+    protobufjs: ^7.0.0
+    rxjs: ^7.8.0
+    undici: ^5.8.1
+  checksum: 2d29c5fdcaa3332577fac20a65a7ca837e937b8aab5c6bb2f20a198e5d07c9d76b534676fcc98b5375ef00f5f9f54f858d55524b3da40b8fe1db4225e1c4fdd7
+  languageName: node
+  linkType: hard
+
 "@xmtp/xmtp-js@file:../../../xmtp-js-sdk::locator=snap%40workspace%3Apackages%2Fsnap":
   version: 0.0.0-development
-  resolution: "@xmtp/xmtp-js@file:../../../xmtp-js-sdk#../../../xmtp-js-sdk::hash=c0f807&locator=snap%40workspace%3Apackages%2Fsnap"
+  resolution: "@xmtp/xmtp-js@file:../../../xmtp-js-sdk#../../../xmtp-js-sdk::hash=2b4292&locator=snap%40workspace%3Apackages%2Fsnap"
   dependencies:
     "@noble/secp256k1": ^1.5.2
-    "@stardazed/streams-polyfill": ^2.4.0
-    "@xmtp/proto": ^3.24.0-beta.2
+    "@xmtp/proto": ^3.26.0
     async-mutex: ^0.4.0
     elliptic: ^6.5.4
     ethers: ^5.5.3
     long: ^5.2.0
-    siwe: ^2.1.3
-  checksum: eaa96a41c49b1347e9e94c5949d17ccdae1555edd23833a1c8c1001cef5de7bde8ef17d940951df29173dc277f39275fd6c47e27ee8c83214780384ce2c949d6
+  checksum: 2f33f2a7b0ddde917d095ad3ed34ed494716418897b2a58017cf65ddcfcd61d89fafcba8558669dfd61d7b6d8a393e0cfd9df0a4d1fdcb7c78f92be41bc075d2
   languageName: node
   linkType: hard
 
