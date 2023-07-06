@@ -18,14 +18,14 @@
     "build:clean": "npm run clean && npm run build",
     "build:website": "node ./scripts/build-website.js",
     "clean": "rimraf dist",
-    "lint": "yarn lint:eslint && yarn lint:misc --check",
+    "lint": "npm run lint:eslint && npm run lint:misc --check",
     "lint:eslint": "eslint . --cache --ext js,ts",
-    "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
+    "lint:fix": "npm run lint:eslint --fix && npm run lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
     "prepublishOnly": "npm run build:clean",
     "serve": "mm-snap serve",
     "start": "mm-snap watch --transpilationMode=localAndDeps",
-    "pretest": "yarn build",
+    "pretest": "npm run build",
     "test": "jest"
   },
   "release": {
