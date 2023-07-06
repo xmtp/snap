@@ -1,10 +1,9 @@
 import { PrivateKeyBundleV1, XmtpEnv } from '@xmtp/xmtp-js';
-import { buildRpcRequest, newWallet } from './testHelpers';
-import { fetcher, keystore } from '@xmtp/proto';
-import { base64Encode } from './utils';
+import { keystore } from '@xmtp/proto';
 import { installSnap } from '@metamask/snaps-jest';
+import { buildRpcRequest, newWallet } from './testHelpers';
+import { base64Encode } from './utils';
 
-const { b64Encode } = fetcher;
 const {
   InitKeystoreRequest,
   GetKeystoreStatusRequest,

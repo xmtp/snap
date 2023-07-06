@@ -5,12 +5,12 @@ import {
   PrefixedPersistence,
   PrivateKeyBundleV1,
 } from '@xmtp/xmtp-js';
-import { privateKey } from '@xmtp/proto';
+import { privateKey, fetcher } from '@xmtp/proto';
+import type { XmtpEnv } from '@xmtp/xmtp-js';
 import SnapPersistence from './persistence';
 import { type SnapRequest, KeystoreHandler } from './handlers';
-import type { XmtpEnv } from '@xmtp/xmtp-js';
-import { fetcher } from '@xmtp/proto';
 import { KeyNotFoundError } from './errors';
+
 const { b64Encode } = fetcher;
 
 // Mapping of keystore identifiers ($walletAddress/$env) to handlers

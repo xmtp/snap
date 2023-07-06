@@ -4,18 +4,19 @@ import {
   PrivateKeyBundleV1,
   keystoreApiDefs,
 } from '@xmtp/xmtp-js';
-import { fetcher } from '@xmtp/proto';
+import { fetcher, keystore as keystoreProto } from '@xmtp/proto';
 import { Reader, Writer } from 'protobufjs/minimal';
-import { SnapMeta } from '.';
-import { keystore as keystoreProto } from '@xmtp/proto';
 import {
   InitKeystoreRequest as InitKeystoreRequestType,
   InitKeystoreResponse as InitKeystoreResponseType,
   GetKeystoreStatusRequest as GetKeystoreStatusRequestType,
   GetKeystoreStatusResponse as GetKeystoreStatusResponseType,
+  // eslint-disable-next-line import/extensions
 } from '@xmtp/proto/ts/dist/types/keystore_api/v1/keystore.pb';
 import { getKeys, getPersistence, setKeys } from './utils';
 import { KeyNotFoundError } from './errors';
+import { SnapMeta } from '.';
+
 const {
   GetKeystoreStatusResponse_KeystoreStatus: KeystoreStatus,
   InitKeystoreRequest,
@@ -118,6 +119,7 @@ export async function getKeystoreStatus(
       if (walletAddress !== req.meta.walletAddress) {
         throw new Error('wallet address does not match metadata');
       }
+
       try {
         const persistence = getPersistence(
           req.meta.walletAddress,

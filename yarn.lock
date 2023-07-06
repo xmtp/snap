@@ -18990,7 +18990,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:^7.0.0":
+"protobufjs@npm:^7.0.0, protobufjs@npm:^7.2.4":
   version: 7.2.4
   resolution: "protobufjs@npm:7.2.4"
   dependencies:
@@ -20819,6 +20819,7 @@ __metadata:
     jest: ^29.6.0
     prettier: ^2.2.1
     prettier-plugin-packagejson: ^2.2.11
+    protobufjs: ^7.2.4
     rimraf: ^3.0.2
     ts-jest: ^29.1.1
     typescript: ^4.7.4

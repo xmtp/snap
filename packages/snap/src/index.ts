@@ -1,8 +1,8 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import './polyfills'; // eslint-disable-line import/no-unassigned-import
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
-import { getHandler, isSnapRequest } from './utils';
 import { type XmtpEnv } from '@xmtp/xmtp-js';
+import { getHandler, isSnapRequest } from './utils';
 import { initKeystore, getKeystoreStatus } from './handlers';
 
 export type SnapMeta = {
@@ -10,16 +10,6 @@ export type SnapMeta = {
   env: XmtpEnv;
 };
 
-/**
- * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
- *
- * @param args - The request handler args as object.
- * @param args.origin - The origin of the request, e.g., the website that
- * invoked the snap.
- * @param args.request - A validated JSON-RPC request object.
- * @returns The result of `snap_dialog`.
- * @throws If the request method is not valid for this snap.
- */
 export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
   request: { params, method },
