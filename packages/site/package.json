@@ -10,7 +10,8 @@
     "lint:eslint": "eslint . --cache --ext js,ts",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
-    "start": "cross-env GATSBY_TELEMETRY_DISABLED=1 gatsby develop"
+    "start": "cross-env GATSBY_TELEMETRY_DISABLED=1 gatsby develop",
+    "test": "echo TODO"
   },
   "browserslist": {
     "production": [
@@ -26,6 +27,10 @@
   },
   "dependencies": {
     "@metamask/providers": "^9.0.0",
+    "@xmtp/proto": "^3.26.0",
+    "@xmtp/xmtp-js": "9.1.0-snap.5",
+    "buffer": "^6.0.3",
+    "ethers": "^6.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
