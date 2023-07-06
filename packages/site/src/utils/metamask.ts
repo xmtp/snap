@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 /**
  * Detect if the wallet injecting the ethereum object is Flask.
  *
@@ -5,7 +6,6 @@
  */
 export const isFlask = async () => {
   const provider = window.ethereum;
-
   try {
     const clientVersion = await provider?.request({
       method: 'web3_clientVersion',
@@ -17,4 +17,14 @@ export const isFlask = async () => {
   } catch {
     return false;
   }
+};
+
+export const getSigner = () => {
+  const provider = new ethers.BrowserProvider(window.ethereum);
+
+  // Request account access if needed
+  window.ethereum.enable();
+
+  // Getting the signer from provider
+  return provider.getSigner();
 };

@@ -1,3 +1,4 @@
+import './polyfills';
 import { FunctionComponent, ReactNode, useContext } from 'react';
 import styled from 'styled-components';
 import { Footer, Header } from './components';

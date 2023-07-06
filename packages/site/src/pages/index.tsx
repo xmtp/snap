@@ -1,8 +1,9 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MetamaskActions, MetaMaskContext } from '../hooks';
 import {
   connectSnap,
+  getSigner,
   getSnap,
   sendHello,
   shouldDisplayReconnectButton,
@@ -11,9 +12,10 @@ import {
   ConnectButton,
   InstallFlaskButton,
   ReconnectButton,
-  SendHelloButton,
   Card,
 } from '../components';
+import { Client, SnapProvider } from '@xmtp/xmtp-js';
+import { ListConversations } from '../components/ListConversations';
 
 const Container = styled.div`
   display: flex;
@@ -101,6 +103,7 @@ const ErrorMessage = styled.div`
 
 const Index = () => {
   const [state, dispatch] = useContext(MetaMaskContext);
+  const [xmtp, setXmtp] = useState<Client | null>(null);
 
   const handleConnectClick = async () => {
     try {
@@ -117,14 +120,17 @@ const Index = () => {
     }
   };
 
-  const handleSendHelloClick = async () => {
-    try {
-      await sendHello();
-    } catch (e) {
-      console.error(e);
-      dispatch({ type: MetamaskActions.SetError, payload: e });
-    }
-  };
+  useEffect(() => {
+    const init = async () => {
+      const signer = await getSigner();
+      const client = await Client.create(signer, {
+        keystoreProviders: [new SnapProvider()],
+      });
+
+      setXmtp(client);
+    };
+    init();
+  }, []);
 
   return (
     <Container>
@@ -183,25 +189,7 @@ const Index = () => {
             disabled={!state.installedSnap}
           />
         )}
-        <Card
-          content={{
-            title: 'Send Hello message',
-            description:
-              'Display a custom message within a confirmation screen in MetaMask.',
-            button: (
-              <SendHelloButton
-                onClick={handleSendHelloClick}
-                disabled={!state.installedSnap}
-              />
-            ),
-          }}
-          disabled={!state.installedSnap}
-          fullWidth={
-            state.isFlask &&
-            Boolean(state.installedSnap) &&
-            !shouldDisplayReconnectButton(state.installedSnap)
-          }
-        />
+        <ListConversations client={xmtp} />
         <Notice>
           <p>
             Please note that the <b>snap.manifest.json</b> and{' '}

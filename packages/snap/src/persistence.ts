@@ -1,4 +1,4 @@
-import { Persistence } from '@xmtp/xmtp-js';
+import type { Persistence } from '@xmtp/xmtp-js';
 
 const ENCODING = 'binary';
 
@@ -10,9 +10,11 @@ export default class SnapPersistence implements Persistence {
       method: 'snap_manageState',
       params: { operation: 'get' },
     });
+
     if (!state) {
       return null;
     }
+
     const value = state[key];
     return value ? Uint8Array.from(Buffer.from(value, ENCODING)) : null;
   }
