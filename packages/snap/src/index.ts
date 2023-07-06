@@ -1,8 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import './polyfills'; // eslint-disable-line import/no-unassigned-import
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
-import { panel, text, heading } from '@metamask/snaps-ui';
-import { isSnapRequest } from './utils';
+import { getHandler, isSnapRequest } from './utils';
 import { type XmtpEnv } from '@xmtp/xmtp-js';
 import { initKeystore, getKeystoreStatus } from './handlers';
 
@@ -23,26 +22,30 @@ export type SnapMeta = {
  */
 export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
-  request,
+  request: { params, method },
 }) => {
+  console.log(`Got a request from ${origin} for ${method}`);
   // Validate that the request has the expected fields, which are set on all requests from `xmtp-js`
-  if (!isSnapRequest(request.params)) {
+  if (!isSnapRequest(params)) {
     throw new Error('not a valid snap request');
   }
 
   // Unauthenticated methods:
-  if (request.method === 'initKeystore') {
-    return initKeystore(request.params);
+  if (method === 'initKeystore') {
+    return initKeystore(params);
   }
 
-  if (request.method === 'getKeystoreStatus') {
-    return getKeystoreStatus(request.params);
+  if (method === 'getKeystoreStatus') {
+    return getKeystoreStatus(params);
   }
 
   // Authenticated methods
-  // const handler = await getHandler();
-  // if (request.method in handler && isSnapRequest(request.params)) {
-  //   return handler[request.method as keyof typeof handler](request.params);
-  // }
+  const { meta } = params;
+
+  // Authenticated methods
+  const handler = await getHandler(meta.walletAddress, meta.env);
+  if (method in handler) {
+    return handler[method as keyof typeof handler](params);
+  }
   throw new Error('Invalid method');
 };

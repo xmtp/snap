@@ -1,25 +1,25 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import {
-  Client,
   InMemoryKeystore,
   Persistence,
   PrefixedPersistence,
   PrivateKeyBundleV1,
 } from '@xmtp/xmtp-js';
 import { privateKey } from '@xmtp/proto';
-import SnapHandler from './handlers';
 import SnapPersistence from './persistence';
-import type { SnapRequest } from './handlers';
-import type { SnapMeta } from './index';
+import { type SnapRequest, KeystoreHandler } from './handlers';
 import type { XmtpEnv } from '@xmtp/xmtp-js';
+import { fetcher } from '@xmtp/proto';
+import { KeyNotFoundError } from './errors';
+const { b64Encode } = fetcher;
 
 // Mapping of keystore identifiers ($walletAddress/$env) to handlers
-const handlers = new Map<string, ReturnType<typeof SnapHandler>>();
+const handlers = new Map<string, ReturnType<typeof KeystoreHandler>>();
 
 export async function getKeys(persistence: Persistence) {
   const keys = await persistence.getItem(`keys`);
   if (!keys) {
-    throw new Error('No keys found for client');
+    throw new KeyNotFoundError('No keys found for client');
   }
   const bundle = privateKey.PrivateKeyBundle.decode(keys).v1;
   if (!bundle) {
@@ -39,7 +39,7 @@ export async function getHandler(address: string, env: XmtpEnv) {
     const persistence = getPersistence(address, env);
     const keys = await getKeys(persistence);
     const keyStore = await InMemoryKeystore.create(keys, persistence);
-    handlers.set(key, SnapHandler(keyStore));
+    handlers.set(key, KeystoreHandler(keyStore));
   }
 
   return handlers.get(key);
@@ -55,8 +55,6 @@ export function getPersistence(address: string, env: XmtpEnv) {
 export function isSnapRequest(params: any): params is SnapRequest {
   return (
     Boolean(params) &&
-    // Expect that params.req is not undefined. BUT it may be null for certain request types
-    params.req !== undefined &&
     typeof params.meta === 'object' &&
     params.meta.env &&
     params.meta.walletAddress
@@ -74,6 +72,10 @@ export const truncate = (str: string | undefined, length: number): string => {
 
   return str;
 };
+
+export function base64Encode(data: Uint8Array) {
+  return b64Encode(data, 0, data.length);
+}
 
 function buildKey(address: string, env: XmtpEnv) {
   return `${address}/${env}`;

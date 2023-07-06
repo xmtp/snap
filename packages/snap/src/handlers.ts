@@ -4,7 +4,7 @@ import {
   PrivateKeyBundleV1,
   keystoreApiDefs,
 } from '@xmtp/xmtp-js';
-import { conversationReference, fetcher } from '@xmtp/proto';
+import { fetcher } from '@xmtp/proto';
 import { Reader, Writer } from 'protobufjs/minimal';
 import { SnapMeta } from '.';
 import { keystore as keystoreProto } from '@xmtp/proto';
@@ -13,8 +13,9 @@ import {
   InitKeystoreResponse as InitKeystoreResponseType,
   GetKeystoreStatusRequest as GetKeystoreStatusRequestType,
   GetKeystoreStatusResponse as GetKeystoreStatusResponseType,
-} from '@xmtp/proto/ts/keystore_api/v1/keystore.pb';
+} from '@xmtp/proto/ts/dist/types/keystore_api/v1/keystore.pb';
 import { getKeys, getPersistence, setKeys } from './utils';
+import { KeyNotFoundError } from './errors';
 const {
   GetKeystoreStatusResponse_KeystoreStatus: KeystoreStatus,
   InitKeystoreRequest,
@@ -53,6 +54,10 @@ export async function processProtoRequest<Req, Res>(
     return serializeResponse(rpc.res, result);
   }
 
+  if (typeof request.req !== 'string') {
+    throw new Error('Expected string response');
+  }
+
   const decodedRequest = rpc.req.decode(b64Decode(request.req));
   const result = await handler(decodedRequest);
   return serializeResponse(rpc.res, result);
@@ -79,11 +84,15 @@ export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
       if (!initKeystoreRequest?.v1) {
         throw new Error('missing v1 keys');
       }
+      const bundle = new PrivateKeyBundleV1(initKeystoreRequest.v1);
+      if (
+        bundle.identityKey.publicKey.walletSignatureAddress() !==
+        req.meta.walletAddress
+      ) {
+        throw new Error('mismatched private key and meta fields');
+      }
       const persistence = getPersistence(req.meta.walletAddress, req.meta.env);
-      await setKeys(
-        persistence,
-        new PrivateKeyBundleV1(initKeystoreRequest.v1),
-      );
+      await setKeys(persistence, bundle);
 
       return {};
     },
@@ -120,6 +129,10 @@ export async function getKeystoreStatus(
           status: KeystoreStatus.KEYSTORE_STATUS_INITIALIZED,
         };
       } catch (e) {
+        // Only swallow KeyNotFoundError and turn into a negative response
+        if (!(e instanceof KeyNotFoundError)) {
+          throw e;
+        }
         return {
           status: KeystoreStatus.KEYSTORE_STATUS_UNINITIALIZED,
         };
@@ -136,25 +149,13 @@ export function KeystoreHandler(backingKeystore: InMemoryKeystore) {
     }
 
     out[method] = async (req: SnapRequest): Promise<SnapResponse> => {
-      if (!apiDef.req) {
-        // eslint-disable-next-line
-        // @ts-ignore-next-line
-        const result = await backingKeystore[
-          method as keyof InMemoryKeystore
-        ]();
-
-        return {
-          res: serializeResponse(result, apiDef.res),
-        };
-      }
-      const request = apiDef.req.decode(fetcher.b64Decode(req.req));
-      // eslint-disable-next-line
-      // @ts-ignore-next-line
-      const result = await backingKeystore[method](request as any);
-      const serialized = serializeResponse(result, apiDef.res);
-      return {
-        res: serialized,
-      };
+      return processProtoRequest(
+        apiDef,
+        req,
+        backingKeystore[method as keyof InMemoryKeystore].bind(
+          backingKeystore,
+        ) as any,
+      );
     };
   }
   return out;
