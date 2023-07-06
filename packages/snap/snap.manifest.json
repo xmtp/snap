@@ -4,15 +4,15 @@
   "proposedName": "TypeScript Example Snap",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "https://github.com/xmtp/snap.git"
   },
   "source": {
-    "shasum": "6l0+Tq8Tk36fz8zy49jy4jh2mBu5DhFZrq9ffe70oEk=",
+    "shasum": "WFn97ZJRQycW+ZNnaztnYArG40amSccgu0uL7AB/doc=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "snap",
+        "packageName": "@xmtp/snap",
         "registry": "https://registry.npmjs.org/"
       }
     }
