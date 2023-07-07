@@ -24,7 +24,7 @@
     "lint:fix": "npm run lint:eslint --fix && npm run lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!**/CHANGELOG.md' '**/*.yml' --ignore-path .gitignore",
     "start": "concurrently \"npm start --workspace=site\" \"npm start --workspace=@xmtp/snap\"",
-    "test": "npm test --workspace=snap"
+    "test": "npm test --workspace=@xmtp/snap"
   },
   "devDependencies": {
     "@metamask/auto-changelog": "^3.1.0",
