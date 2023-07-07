@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@xmtp/proto": "^3.26.0",
-    "@xmtp/xmtp-js": "9.1.0-snap.5",
+    "@xmtp/xmtp-js": "9.3.0-snap.1",
     "async-mutex": "^0.4.0",
     "buffer": "^6.0.3",
     "protobufjs": "^7.2.4"
