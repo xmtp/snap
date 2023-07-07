@@ -35,11 +35,12 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
 
   // Authenticated methods below
   if (method === 'initKeystore') {
-    // Always prompt for user consent before storing any new keys in the store
-    await allowAuthorization(meta.walletAddress, meta.env, origin);
-
     // initKeystore will check to ensure that the bundle matches the wallet address provided above
-    return initKeystore(params);
+    const res = await initKeystore(params);
+    // If the user has uploaded a valid bundle, authorize for the origin.
+    // Bundle is validated to match the wallet address and to have valid public keys
+    await authorizer.authorize(meta.walletAddress, meta.env, origin);
+    return res;
   }
 
   // Check if the user has authorized this origin/wallet/env combination

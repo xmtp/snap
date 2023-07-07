@@ -77,6 +77,7 @@ function buildKey(walletAddress: string, env: XmtpEnv, origin: string) {
 function isStoredAuthRecord(value: any): value is StoredAuthRecord {
   return (
     typeof value === 'object' &&
+    value !== null &&
     'isAuthorized' in value &&
     'authorizedAt' in value &&
     typeof value.isAuthorized === 'boolean' &&

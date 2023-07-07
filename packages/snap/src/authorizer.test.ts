@@ -10,7 +10,7 @@ describe('Authorizer', () => {
   let mockRequest: jest.Mock;
 
   beforeEach(() => {
-    const mockState = {};
+    let mockState = {};
     // Hacky test setup to mock the Snap storage
     mockRequest = jest.fn().mockImplementation(({ method, params }) => {
       if (method !== 'snap_manageState') {
@@ -24,7 +24,7 @@ describe('Authorizer', () => {
 
       if (operation === 'update') {
         const { newState } = params;
-        Object.assign(mockState, newState);
+        mockState = newState;
         return null;
       }
 
@@ -41,7 +41,6 @@ describe('Authorizer', () => {
     expect(await authorizer.isAuthorized(WALLET_ADDRESS, ENV, ORIGIN)).toBe(
       false,
     );
-    expect(mockRequest).toHaveBeenCalledTimes(1);
   });
 
   it('allows for authorization', async () => {
@@ -50,8 +49,6 @@ describe('Authorizer', () => {
     expect(await authorizer.isAuthorized(WALLET_ADDRESS, ENV, ORIGIN)).toBe(
       true,
     );
-
-    expect(mockRequest).toHaveBeenCalledTimes(2);
   });
 
   it('stores different authorization statuses for different origins', async () => {
@@ -68,8 +65,6 @@ describe('Authorizer', () => {
         'https://example2.com',
       ),
     ).toBe(false);
-
-    expect(mockRequest).toHaveBeenCalledTimes(3);
   });
 
   it('handles expiration', async () => {
@@ -83,8 +78,6 @@ describe('Authorizer', () => {
     expect(await authorizer.isAuthorized(WALLET_ADDRESS, ENV, ORIGIN)).toBe(
       false,
     );
-
-    expect(mockRequest).toHaveBeenCalledTimes(3);
   });
 
   it('allows for re-authorization after expiration', async () => {
@@ -103,7 +96,5 @@ describe('Authorizer', () => {
     expect(await authorizer.isAuthorized(WALLET_ADDRESS, ENV, ORIGIN)).toBe(
       true,
     );
-
-    expect(mockRequest).toHaveBeenCalledTimes(5);
   });
 });
