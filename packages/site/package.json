@@ -6,9 +6,9 @@
   "scripts": {
     "build": "cross-env GATSBY_TELEMETRY_DISABLED=1 gatsby build",
     "clean": "rimraf public",
-    "lint": "yarn lint:eslint && yarn lint:misc --check",
+    "lint": "npm run lint:eslint && npm run lint:misc --check",
     "lint:eslint": "eslint . --cache --ext js,ts",
-    "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
+    "lint:fix": "npm run lint:eslint --fix && npm run lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
     "start": "cross-env GATSBY_TELEMETRY_DISABLED=1 gatsby develop",
     "test": "echo TODO"

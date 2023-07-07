@@ -71,7 +71,6 @@
     "ts-jest": "^29.1.1",
     "typescript": "^4.7.4"
   },
-  "packageManager": "yarn@3.2.1",
   "engines": {
     "node": ">=16.0.0"
   },
