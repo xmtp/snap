@@ -13,3 +13,7 @@ export function buildRpcRequest(method: string, req: string, meta: SnapMeta) {
     params: { req, meta },
   };
 }
+
+export async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

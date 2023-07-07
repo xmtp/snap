@@ -86,6 +86,7 @@ export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
         throw new Error('missing v1 keys');
       }
       const bundle = new PrivateKeyBundleV1(initKeystoreRequest.v1);
+      // Ensure that the signature on the bundle's public key matches the stated wallet address
       if (
         bundle.identityKey.publicKey.walletSignatureAddress() !==
         req.meta.walletAddress
@@ -93,6 +94,9 @@ export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
         throw new Error('mismatched private key and meta fields');
       }
       const persistence = getPersistence(req.meta.walletAddress, req.meta.env);
+      console.log(
+        `Setting keys for ${req.meta.walletAddress} in env ${req.meta.env}}`,
+      );
       await setKeys(persistence, bundle);
 
       return {};
@@ -131,6 +135,7 @@ export async function getKeystoreStatus(
           status: KeystoreStatus.KEYSTORE_STATUS_INITIALIZED,
         };
       } catch (e) {
+        console.log(e);
         // Only swallow KeyNotFoundError and turn into a negative response
         if (!(e instanceof KeyNotFoundError)) {
           throw e;

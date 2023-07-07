@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "An example Snap written in TypeScript.",
   "proposedName": "TypeScript Example Snap",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "https://github.com/xmtp/snap.git"
   },
   "source": {
-    "shasum": "WFn97ZJRQycW+ZNnaztnYArG40amSccgu0uL7AB/doc=",
+    "shasum": "htLC2gECl8GYxn2Ch/MuNqocfl5OKl4QfXv/fgRg+0s=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",

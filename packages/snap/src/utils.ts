@@ -7,7 +7,7 @@ import {
 } from '@xmtp/xmtp-js';
 import { privateKey, fetcher } from '@xmtp/proto';
 import type { XmtpEnv } from '@xmtp/xmtp-js';
-import SnapPersistence from './persistence';
+import SnapPersistence from './snapPersistence';
 import { type SnapRequest, KeystoreHandler } from './handlers';
 import { KeyNotFoundError } from './errors';
 
@@ -61,17 +61,9 @@ export function isSnapRequest(params: any): params is SnapRequest {
   );
 }
 
-export const truncate = (str: string | undefined, length: number): string => {
-  if (!str) {
-    return '';
-  }
-
-  if (str.length > length) {
-    return `${str.substring(0, length - 3)}...`;
-  }
-
-  return str;
-};
+export function prettyWalletAddress(address: string) {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+}
 
 export function base64Encode(data: Uint8Array) {
   return b64Encode(data, 0, data.length);
