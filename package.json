@@ -22,7 +22,7 @@
     "lint": "npm run lint:eslint && npm run lint:misc --check",
     "lint:eslint": "eslint . --cache --ext js,ts",
     "lint:fix": "npm run lint:eslint --fix && npm run lint:misc --write",
-    "lint:misc": "prettier '**/*.json' '**/*.md' '!**/CHANGELOG.md' '**/*.yml' --ignore-path .gitignore",
+    "lint:misc": "prettier '**/*.json' '**/*.md' '!**/CHANGELOG.md' '**/*.yml' --ignore-path .gitignore --ignore-path package-lock.json",
     "start": "concurrently \"npm start --workspace=site\" \"npm start --workspace=@xmtp/snap\"",
     "test": "npm test --workspace=@xmtp/snap"
   },

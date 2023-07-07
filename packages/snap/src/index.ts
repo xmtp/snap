@@ -45,6 +45,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
 
   // Check if the user has authorized this origin/wallet/env combination
   if (!(await authorizer.isAuthorized(meta.walletAddress, meta.env, origin))) {
+    // If not, prompt for authorization
     await allowAuthorization(meta.walletAddress, meta.env, origin);
   }
 
