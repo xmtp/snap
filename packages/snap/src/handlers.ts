@@ -86,6 +86,10 @@ export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
         throw new Error('missing v1 keys');
       }
       const bundle = new PrivateKeyBundleV1(initKeystoreRequest.v1);
+      if (!bundle.validatePublicKeys()) {
+        throw new Error('invalid public keys');
+      }
+
       // Ensure that the signature on the bundle's public key matches the stated wallet address
       if (
         bundle.identityKey.publicKey.walletSignatureAddress() !==
