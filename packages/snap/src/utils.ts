@@ -19,7 +19,7 @@ const handlers = new Map<string, ReturnType<typeof KeystoreHandler>>();
 export async function getKeys(persistence: Persistence) {
   const keys = await persistence.getItem(`keys`);
   if (!keys) {
-    throw new KeyNotFoundError('No keys found for client');
+    throw new KeyNotFoundError('no keys found for client');
   }
   const bundle = privateKey.PrivateKeyBundle.decode(keys).v1;
   if (!bundle) {
@@ -35,7 +35,6 @@ export function setKeys(persistence: Persistence, keys: PrivateKeyBundleV1) {
 export async function getHandler(address: string, env: XmtpEnv) {
   const key = buildKey(address, env);
   if (!handlers.has(key)) {
-    console.log(`Adding handler to cache for key ${key}`);
     const persistence = getPersistence(address, env);
     const keys = await getKeys(persistence);
     const keyStore = await InMemoryKeystore.create(keys, persistence);
