@@ -1,4 +1,5 @@
 import { defaultSnapOrigin } from '../config';
+import { getSnapParams } from '../config/snap';
 import { GetSnapsResponse, Snap } from '../types';
 
 /**
@@ -25,7 +26,7 @@ export const connectSnap = async (
   await window.ethereum.request({
     method: 'wallet_requestSnaps',
     params: {
-      [snapId]: params,
+      [snapId]: { ...params, ...getSnapParams() },
     },
   });
 };
