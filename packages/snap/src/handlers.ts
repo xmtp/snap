@@ -56,7 +56,7 @@ export async function processProtoRequest<Req, Res>(
   }
 
   if (typeof request.req !== 'string') {
-    throw new Error('Expected string response');
+    throw new Error(`Expected string request. Got: ${request.req}`);
   }
 
   const decodedRequest = rpc.req.decode(b64Decode(request.req));

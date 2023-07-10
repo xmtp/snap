@@ -16,7 +16,12 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
   request: { params, method },
 }) => {
-  console.log(`Got a snap request from ${origin} for ${method}`);
+  console.log(
+    `Got a snap request from ${origin} for ${method}. ${JSON.stringify(
+      params,
+    )}`,
+  );
+
   if (method === 'debug') {
     return handleDebug(params as any);
   }
