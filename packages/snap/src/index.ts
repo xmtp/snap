@@ -16,15 +16,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
   request: { params, method },
 }) => {
-  console.log(
-    `Got a snap request from ${origin} for ${method}. ${JSON.stringify(
-      params,
-    )}`,
-  );
-
-  if (method === 'debug') {
-    return handleDebug(params as any);
-  }
+  console.log(`Got a snap request from ${origin} for ${method}`);
 
   // Validate that the request has the expected fields, which are set on all requests from `xmtp-js`
   if (!isSnapRequest(params)) {
@@ -43,7 +35,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     // initKeystore will check to ensure that the bundle matches the wallet address provided above
     const res = await initKeystore(params);
     // If the user has uploaded a valid bundle, authorize for the origin.
-    // Bundle is validated to match the wallet address and to have valid public keys
+    // Bundle is validated to match the wallet address and to have valid public/private keys
     await authorizer.authorize(meta.walletAddress, meta.env, origin);
     return res;
   }
@@ -102,23 +94,4 @@ async function permissionPrompt(
   }
 
   return result;
-}
-
-async function handleDebug({ action }: { action: string }): Promise<any> {
-  console.log('Handling debug action', action);
-  if (action === 'clear') {
-    await snap.request({
-      method: 'snap_manageState',
-      params: { operation: 'clear' },
-    });
-    return null;
-  }
-
-  if (action === 'read') {
-    return snap.request({
-      method: 'snap_manageState',
-      params: { operation: 'get' },
-    });
-  }
-  throw new Error('Unknown debug method');
 }
