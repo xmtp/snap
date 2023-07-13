@@ -31,7 +31,7 @@ describe('onRPCRequest', () => {
 
       const { request } = await installSnap();
 
-      // Make sure it returns unitialized when new
+      // Check the status of a fresh instance
       const initialStatus = await request(
         buildRpcRequest(
           'getKeystoreStatus',
@@ -42,6 +42,7 @@ describe('onRPCRequest', () => {
         ),
       );
 
+      // Make sure it shows as unititialized
       expect(initialStatus).toRespondWith({
         res: base64Encode(
           GetKeystoreStatusResponse.encode({
@@ -176,7 +177,7 @@ describe('onRPCRequest', () => {
         origin: 'http://somewhere-different.com',
       });
       if (!('getInterface' in response)) {
-        throw new Error('No dialog present');
+        throw new Error('No confirmation present in Snap');
       }
       const ui = await (response as any).getInterface();
       await ui.cancel();
