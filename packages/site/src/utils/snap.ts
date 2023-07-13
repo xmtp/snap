@@ -50,37 +50,3 @@ export const getSnap = async (version?: string): Promise<Snap | undefined> => {
     return undefined;
   }
 };
-
-/**
- * Invoke the "hello" method from the example snap.
- */
-
-export const sendHello = async () => {
-  await window.ethereum.request({
-    method: 'wallet_invokeSnap',
-    params: { snapId: defaultSnapOrigin, request: { method: 'init' } },
-  });
-};
-
-export const clearStorage = async () => {
-  await window.ethereum.request({
-    method: 'wallet_invokeSnap',
-    params: {
-      snapId: defaultSnapOrigin,
-      request: { method: 'debug', params: { action: 'clear' } },
-    },
-  });
-};
-
-export const readStorage = async () => {
-  const result = await window.ethereum.request({
-    method: 'wallet_invokeSnap',
-    params: {
-      snapId: defaultSnapOrigin,
-      request: { method: 'debug', params: { action: 'read' } },
-    },
-  });
-  console.log('Storage', JSON.stringify(result, null, 4));
-};
-
-export const isLocalSnap = (snapId: string) => snapId.startsWith('local:');

@@ -1,13 +1,11 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { Client, SnapProvider } from '@xmtp/xmtp-js';
 import { MetamaskActions, MetaMaskContext } from '../hooks';
 import {
-  clearStorage,
   connectSnap,
   getSigner,
   getSnap,
-  readStorage,
   shouldDisplayReconnectButton,
 } from '../utils';
 import {
@@ -192,18 +190,6 @@ const Index = () => {
           }}
         />
         <ListConversations client={xmtp} />
-        <Card
-          content={{
-            title: 'Debug options',
-            description: 'Manage the storage of the snap',
-            button: (
-              <>
-                <Button onClick={clearStorage}>Clear storage</Button>
-                <Button onClick={readStorage}>Read storage</Button>
-              </>
-            ),
-          }}
-        />
         <Notice>
           <p>
             Please note that the <b>snap.manifest.json</b> and{' '}
