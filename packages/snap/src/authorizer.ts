@@ -26,8 +26,11 @@ type StoredAuthRecord = {
 export class Authorizer {
   expiryMs: number;
 
-  constructor(expiryMs: number = AUTHORIZATION_EXPIRY_MS) {
+  cache?: Map<string, AuthRecord>;
+
+  constructor(expiryMs: number = AUTHORIZATION_EXPIRY_MS, noCache = false) {
     this.expiryMs = expiryMs;
+    this.cache = noCache ? undefined : new Map();
   }
 
   private async getAuthRecord(
@@ -36,6 +39,11 @@ export class Authorizer {
     origin: string,
   ) {
     const key = buildKey(walletAddress, env, origin);
+    // If the record exists in the cache, return it
+    if (this.cache?.has(key)) {
+      return this.cache.get(key);
+    }
+
     const authData = await storage.getItem(key);
     if (!isStoredAuthRecord(authData)) {
       return null;
@@ -64,7 +72,8 @@ export class Authorizer {
       isAuthorized: true,
       authorizedAt: new Date().toISOString(),
     };
-
+    // Cache the result to avoid unnecessary lookups
+    this.cache?.set(key, toAuthRecord(authRecord));
     await storage.setItem(key, authRecord);
   }
 }
