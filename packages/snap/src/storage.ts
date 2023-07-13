@@ -6,6 +6,7 @@ export type StorageProvider = {
   setItem(key: string, value: Json): Promise<void>;
 };
 
+// Wrapper for the snap storage. Expected to be used as a singleton.
 class SnapStorage implements StorageProvider {
   mutex = new Mutex();
 

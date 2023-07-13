@@ -77,6 +77,7 @@ const initKeystoreRPC: SnapRPC<
   res: InitKeystoreResponse,
 };
 
+// Handler for `initKeystore` RPCs, which set the keys in the persistence layer
 export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
   return processProtoRequest(
     initKeystoreRPC,
@@ -116,6 +117,8 @@ const getKeystoreStatusRPC: SnapRPC<
   res: GetKeystoreStatusResponse,
 };
 
+// Handler for `getKeystoreStatus` RPCs, which tells the client whether the keystore has been initialized
+// for the given wallet address and env
 export async function getKeystoreStatus(
   req: SnapRequest,
 ): Promise<SnapResponse> {
@@ -139,9 +142,9 @@ export async function getKeystoreStatus(
           status: KeystoreStatus.KEYSTORE_STATUS_INITIALIZED,
         };
       } catch (e) {
-        console.log(e);
         // Only swallow KeyNotFoundError and turn into a negative response
         if (!(e instanceof KeyNotFoundError)) {
+          console.error(e);
           throw e;
         }
         return {
@@ -156,7 +159,7 @@ export function KeystoreHandler(backingKeystore: InMemoryKeystore) {
   const out: any = {};
   for (const [method, apiDef] of Object.entries(keystoreApiDefs)) {
     if (!(method in backingKeystore)) {
-      throw new Error('No backing method');
+      throw new Error('no method found in keystore');
     }
 
     out[method] = async (req: SnapRequest): Promise<SnapResponse> => {

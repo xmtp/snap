@@ -6,11 +6,18 @@ export function newWallet() {
   return Wallet.createRandom();
 }
 
-export function buildRpcRequest(method: string, req: string, meta: SnapMeta) {
+export function buildRpcRequest(
+  method: string,
+  req: string | null,
+  meta: SnapMeta,
+) {
+  const params: { req?: string; meta: SnapMeta } = req
+    ? { req, meta }
+    : { meta };
   return {
     origin: 'http://localhost:3000',
     method,
-    params: { req, meta },
+    params,
   };
 }
 

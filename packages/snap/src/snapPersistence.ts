@@ -4,6 +4,8 @@ import storage from './storage';
 const ENCODING = 'binary';
 
 // Wraps the snap storage in an interface compatible with the XMTP persistence interface
+// Main difference is that XMTP persistence asssumes all values are Uint8Arrays
+// and expects implementations to handle serialization
 export default class SnapPersistence implements Persistence {
   async getItem(key: string): Promise<Uint8Array | null> {
     const value = await storage.getItem(key);
