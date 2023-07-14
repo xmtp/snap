@@ -6,6 +6,7 @@ import { heading, panel, text } from '@metamask/snaps-ui';
 import { getHandler, isSnapRequest, prettyWalletAddress } from './utils';
 import { initKeystore, getKeystoreStatus } from './handlers';
 import authorizer from './authorizer';
+import { GET_KEYSTORE_STATUS_METHOD, INIT_KEYSTORE_METHOD } from './config';
 
 export type SnapMeta = {
   walletAddress: string;
@@ -26,12 +27,12 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   const { meta } = params;
 
   // Unauthenticated methods:
-  if (method === 'getKeystoreStatus') {
+  if (method === GET_KEYSTORE_STATUS_METHOD) {
     return getKeystoreStatus(params);
   }
 
   // Authenticated methods below
-  if (method === 'initKeystore') {
+  if (method === INIT_KEYSTORE_METHOD) {
     // initKeystore will check to ensure that the bundle matches the wallet address provided above
     const res = await initKeystore(params);
     // If the user has uploaded a valid bundle, authorize for the origin.

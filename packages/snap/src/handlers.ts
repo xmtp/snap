@@ -144,7 +144,6 @@ export async function getKeystoreStatus(
       } catch (e) {
         // Only swallow KeyNotFoundError and turn into a negative response
         if (!(e instanceof KeyNotFoundError)) {
-          console.error(e);
           throw e;
         }
         return {
