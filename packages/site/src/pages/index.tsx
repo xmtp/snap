@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
+import { Client, SnapProvider } from '@xmtp/xmtp-js';
 import { MetamaskActions, MetaMaskContext } from '../hooks';
 import {
   connectSnap,
   getSigner,
   getSnap,
-  sendHello,
   shouldDisplayReconnectButton,
 } from '../utils';
 import {
@@ -13,8 +13,8 @@ import {
   InstallFlaskButton,
   ReconnectButton,
   Card,
+  Button,
 } from '../components';
-import { Client, SnapProvider } from '@xmtp/xmtp-js';
 import { ListConversations } from '../components/ListConversations';
 
 const Container = styled.div`
@@ -120,26 +120,19 @@ const Index = () => {
     }
   };
 
-  useEffect(() => {
-    const init = async () => {
-      const signer = await getSigner();
-      const client = await Client.create(signer, {
-        keystoreProviders: [new SnapProvider()],
-      });
-
-      setXmtp(client);
-    };
-    init();
+  const connectXmtp = useCallback(async () => {
+    const signer = await getSigner();
+    const client = await Client.create(signer, {
+      keystoreProviders: [new SnapProvider()],
+    });
+    setXmtp(client);
   }, []);
 
   return (
     <Container>
       <Heading>
-        Welcome to <Span>template-snap</Span>
+        <Span>XMTP</Span> Snap Playground
       </Heading>
-      <Subtitle>
-        Get started by editing <code>src/index.ts</code>
-      </Subtitle>
       <CardContainer>
         {state.error && (
           <ErrorMessage>
@@ -189,6 +182,13 @@ const Index = () => {
             disabled={!state.installedSnap}
           />
         )}
+        <Card
+          content={{
+            title: 'Connect XMTP',
+            description: 'Manage the storage of the snap',
+            button: <Button onClick={connectXmtp}>Connect to XMTP</Button>,
+          }}
+        />
         <ListConversations client={xmtp} />
         <Notice>
           <p>

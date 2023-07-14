@@ -56,7 +56,7 @@ export async function processProtoRequest<Req, Res>(
   }
 
   if (typeof request.req !== 'string') {
-    throw new Error('Expected string response');
+    throw new Error(`Expected string request. Got: ${request.req}`);
   }
 
   const decodedRequest = rpc.req.decode(b64Decode(request.req));
@@ -77,6 +77,7 @@ const initKeystoreRPC: SnapRPC<
   res: InitKeystoreResponse,
 };
 
+// Handler for `initKeystore` RPCs, which set the keys in the persistence layer
 export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
   return processProtoRequest(
     initKeystoreRPC,
@@ -86,6 +87,11 @@ export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
         throw new Error('missing v1 keys');
       }
       const bundle = new PrivateKeyBundleV1(initKeystoreRequest.v1);
+      if (!bundle.validatePublicKeys()) {
+        throw new Error('invalid public keys');
+      }
+
+      // Ensure that the signature on the bundle's public key matches the stated wallet address
       if (
         bundle.identityKey.publicKey.walletSignatureAddress() !==
         req.meta.walletAddress
@@ -93,6 +99,9 @@ export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
         throw new Error('mismatched private key and meta fields');
       }
       const persistence = getPersistence(req.meta.walletAddress, req.meta.env);
+      console.log(
+        `Setting keys for ${req.meta.walletAddress} in env ${req.meta.env}}`,
+      );
       await setKeys(persistence, bundle);
 
       return {};
@@ -108,6 +117,8 @@ const getKeystoreStatusRPC: SnapRPC<
   res: GetKeystoreStatusResponse,
 };
 
+// Handler for `getKeystoreStatus` RPCs, which tells the client whether the keystore has been initialized
+// for the given wallet address and env
 export async function getKeystoreStatus(
   req: SnapRequest,
 ): Promise<SnapResponse> {
@@ -147,7 +158,7 @@ export function KeystoreHandler(backingKeystore: InMemoryKeystore) {
   const out: any = {};
   for (const [method, apiDef] of Object.entries(keystoreApiDefs)) {
     if (!(method in backingKeystore)) {
-      throw new Error('No backing method');
+      throw new Error('no method found in keystore');
     }
 
     out[method] = async (req: SnapRequest): Promise<SnapResponse> => {

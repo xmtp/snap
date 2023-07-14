@@ -1,13 +1,13 @@
 {
-  "version": "0.1.0",
-  "description": "An example Snap written in TypeScript.",
-  "proposedName": "TypeScript Example Snap",
+  "version": "0.2.1",
+  "description": "A Snap that securely stores your XMTP keys across apps",
+  "proposedName": "Sign in with XMTP",
   "repository": {
     "type": "git",
     "url": "https://github.com/xmtp/snap.git"
   },
   "source": {
-    "shasum": "WFn97ZJRQycW+ZNnaztnYArG40amSccgu0uL7AB/doc=",
+    "shasum": "b5JxstM+SUDmu8WPTXRfDaXA5QZx9BNW2fQX/GC17/g=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
