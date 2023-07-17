@@ -1,6 +1,7 @@
 import { GatsbyConfig } from 'gatsby';
-
-require('dotenv').config({
+import dotenv from 'dotenv';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
 });
 
