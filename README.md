@@ -53,5 +53,5 @@ This project uses [semantic-release](https://semantic-release.gitbook.io/semanti
 
 ## Notes
 
-- Babel is used for transpiling TypeScript to JavaScript. hen building with the CLI,
+- Babel is used for transpiling TypeScript to JavaScript. When building with the CLI,
   `transpilationMode` must be set to `localAndDeps` to include `xmtp-js` in the transpilation, which is required for the Snap to build properly.
