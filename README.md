@@ -14,7 +14,7 @@ This is done automatically, using [RPC definitions defined in `xmtp-js`](https:/
 
 ### Authentication
 
-Two methods in the Snap allow unauthenticated access. `initKeystore` and `getKeystoreStatus`.
+Two methods in the Snap allow unauthenticated access. `initKeystore` and `getKeystoreStatus`. Even unauthenticated APIs require the user to have previously installed the Snap and authorized the origin to connect to it.
 
 `initKeystore` takes an XMTP `PrivateKeyBundle` as an argument and saves it in the Snaps storage. Upon successful validation and storage of the XMTP keys, the origin that called `initKeystore` is authorized to make calls to restricted Keystore methods for 30 days.
 
