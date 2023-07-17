@@ -50,3 +50,5 @@ export const getSnap = async (version?: string): Promise<Snap | undefined> => {
     return undefined;
   }
 };
+
+export const isLocalSnap = (snapId: string) => snapId.startsWith('local:');
