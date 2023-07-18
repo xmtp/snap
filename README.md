@@ -43,9 +43,9 @@ npm start
 
 ### Testing and Linting
 
-Run `yarn test` to run the tests once.
+Run `npm test` to run the tests once.
 
-Run `yarn lint` to run the linter, or run `yarn lint:fix` to run the linter and fix any automatically fixable issues.
+Run `npm run lint` to run the linter, or run `npm run lint:fix` to run the linter and fix any automatically fixable issues.
 
 ### Releasing & Publishing
 
