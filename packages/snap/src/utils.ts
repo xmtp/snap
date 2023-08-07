@@ -68,7 +68,7 @@ export function isSnapRequest(params: any): params is SnapRequest {
   );
 }
 
-// Returns the first and last 4 characters of the address separated by ellipses
+// Returns the first 6 and last 4 characters of the address separated by ellipses
 export function prettyWalletAddress(address: string) {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
