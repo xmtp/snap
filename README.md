@@ -14,7 +14,7 @@ This is done automatically, using [RPC definitions defined in `xmtp-js`](https:/
 
 ### Authentication
 
-Two methods in the Snap allow unauthenticated access. `initKeystore` and `getKeystoreStatus`.
+Two methods in the Snap allow unauthenticated access. `initKeystore` and `getKeystoreStatus`. Even unauthenticated APIs require the user to have previously installed the Snap and authorized the origin to connect to it.
 
 `initKeystore` takes an XMTP `PrivateKeyBundle` as an argument and saves it in the Snaps storage. Upon successful validation and storage of the XMTP keys, the origin that called `initKeystore` is authorized to make calls to restricted Keystore methods for 30 days.
 
@@ -43,9 +43,9 @@ npm start
 
 ### Testing and Linting
 
-Run `yarn test` to run the tests once.
+Run `npm test` to run the tests once.
 
-Run `yarn lint` to run the linter, or run `yarn lint:fix` to run the linter and fix any automatically fixable issues.
+Run `npm run lint` to run the linter, or run `npm run lint:fix` to run the linter and fix any automatically fixable issues.
 
 ### Releasing & Publishing
 
@@ -53,5 +53,5 @@ This project uses [semantic-release](https://semantic-release.gitbook.io/semanti
 
 ## Notes
 
-- Babel is used for transpiling TypeScript to JavaScript. hen building with the CLI,
+- Babel is used for transpiling TypeScript to JavaScript. When building with the CLI,
   `transpilationMode` must be set to `localAndDeps` to include `xmtp-js` in the transpilation, which is required for the Snap to build properly.
