@@ -23,7 +23,7 @@ export const getSigner = () => {
   const provider = new ethers.BrowserProvider(window.ethereum);
 
   // Request account access if needed
-  window.ethereum.enable();
+  window.ethereum.request({ method: 'eth_requestAccounts' });
 
   // Getting the signer from provider
   return provider.getSigner();
