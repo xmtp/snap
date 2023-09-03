@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "@metamask/providers": "^9.0.0",
-    "@xmtp/proto": "^3.26.0",
-    "@xmtp/xmtp-js": "9.3.0-snap.1",
+    "@xmtp/proto": "^3.28.0-beta.1",
+    "@xmtp/xmtp-js": "^11.0.0-beta.7",
     "buffer": "^6.0.3",
     "ethers": "^6.6.2",
     "react": "^18.2.0",
