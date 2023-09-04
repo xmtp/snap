@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import {
   InMemoryKeystore,
+  Keystore,
   PrivateKeyBundleV1,
   keystoreApiDefs,
 } from '@xmtp/xmtp-js';
@@ -161,13 +162,16 @@ export function KeystoreHandler(backingKeystore: InMemoryKeystore) {
       throw new Error('no method found in keystore');
     }
 
+    // eslint-disable-next-line no-loop-func
     out[method] = async (req: SnapRequest): Promise<SnapResponse> => {
+      const backingMethod = backingKeystore[method as keyof Keystore];
+      if (typeof backingMethod !== 'function') {
+        throw new Error('not a function');
+      }
       return processProtoRequest(
         apiDef,
         req,
-        backingKeystore[method as keyof InMemoryKeystore].bind(
-          backingKeystore,
-        ) as any,
+        backingMethod.bind(backingKeystore) as any,
       );
     };
   }
