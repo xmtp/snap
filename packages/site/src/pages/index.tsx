@@ -16,6 +16,7 @@ import {
   Button,
 } from '../components';
 import { ListConversations } from '../components/ListConversations';
+import { defaultSnapOrigin, getSnapParams } from '../config/snap';
 
 const Container = styled.div`
   display: flex;
@@ -41,16 +42,6 @@ const Heading = styled.h1`
 
 const Span = styled.span`
   color: ${(props) => props.theme.colors.primary.default};
-`;
-
-const Subtitle = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.large};
-  font-weight: 500;
-  margin-top: 0;
-  margin-bottom: 0;
-  ${({ theme }) => theme.mediaQueries.small} {
-    font-size: ${({ theme }) => theme.fontSizes.text};
-  }
 `;
 
 const CardContainer = styled.div`
@@ -123,7 +114,9 @@ const Index = () => {
   const connectXmtp = useCallback(async () => {
     const signer = await getSigner();
     const client = await Client.create(signer, {
-      keystoreProviders: [new SnapProvider()],
+      keystoreProviders: [
+        new SnapProvider(defaultSnapOrigin, getSnapParams().version),
+      ],
     });
     setXmtp(client);
   }, []);
