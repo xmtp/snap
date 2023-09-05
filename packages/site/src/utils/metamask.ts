@@ -19,11 +19,11 @@ export const isFlask = async () => {
   }
 };
 
-export const getSigner = () => {
+export const getSigner = async () => {
   const provider = new ethers.BrowserProvider(window.ethereum);
 
   // Request account access if needed
-  window.ethereum.request({ method: 'eth_requestAccounts' });
+  await window.ethereum.request({ method: 'eth_requestAccounts' });
 
   // Getting the signer from provider
   return provider.getSigner();
