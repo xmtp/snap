@@ -1,5 +1,5 @@
 {
-  "version": "0.2.1",
+  "version": "1.2.2",
   "description": "A Snap that securely stores your XMTP keys across apps",
   "proposedName": "Sign in with XMTP",
   "repository": {
