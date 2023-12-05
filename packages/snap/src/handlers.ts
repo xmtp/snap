@@ -1,22 +1,19 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import {
-  InMemoryKeystore,
-  Keystore,
-  PrivateKeyBundleV1,
-  keystoreApiDefs,
-} from '@xmtp/xmtp-js';
 import { fetcher, keystore as keystoreProto } from '@xmtp/proto';
-import { Reader, Writer } from 'protobufjs/minimal';
-import {
+import type {
   InitKeystoreRequest as InitKeystoreRequestType,
   InitKeystoreResponse as InitKeystoreResponseType,
   GetKeystoreStatusRequest as GetKeystoreStatusRequestType,
   GetKeystoreStatusResponse as GetKeystoreStatusResponseType,
   // eslint-disable-next-line import/extensions
 } from '@xmtp/proto/ts/dist/types/keystore_api/v1/keystore.pb';
-import { getKeys, getPersistence, setKeys } from './utils';
+import type { InMemoryKeystore, Keystore } from '@xmtp/xmtp-js';
+import { PrivateKeyBundleV1, keystoreApiDefs } from '@xmtp/xmtp-js';
+import type { Reader, Writer } from 'protobufjs/minimal';
+
+import type { SnapMeta } from '.';
 import { KeyNotFoundError } from './errors';
-import { SnapMeta } from '.';
+import { getKeys, getPersistence, setKeys } from './utils';
 
 const {
   GetKeystoreStatusResponse_KeystoreStatus: KeystoreStatus,

@@ -1,4 +1,4 @@
-import { Json } from '@metamask/snaps-types';
+import type { Json } from '@metamask/snaps-types';
 import { Mutex } from 'async-mutex';
 
 export type StorageProvider = {

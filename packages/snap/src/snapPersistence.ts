@@ -1,4 +1,5 @@
 import type { Persistence } from '@xmtp/xmtp-js';
+
 import storage from './storage';
 
 const ENCODING = 'binary';

@@ -1,15 +1,15 @@
 /* eslint-disable jsdoc/require-jsdoc */
+import { privateKey, fetcher } from '@xmtp/proto';
 import {
   InMemoryKeystore,
-  Persistence,
   PrefixedPersistence,
   PrivateKeyBundleV1,
 } from '@xmtp/xmtp-js';
-import { privateKey, fetcher } from '@xmtp/proto';
-import type { XmtpEnv } from '@xmtp/xmtp-js';
-import SnapPersistence from './snapPersistence';
-import { type SnapRequest, KeystoreHandler } from './handlers';
+import type { XmtpEnv, Persistence } from '@xmtp/xmtp-js';
+
 import { KeyNotFoundError } from './errors';
+import { type SnapRequest, KeystoreHandler } from './handlers';
+import SnapPersistence from './snapPersistence';
 
 const { b64Encode } = fetcher;
 
@@ -32,7 +32,10 @@ export async function getKeys(persistence: Persistence) {
 }
 
 // Store the keys in the provided persistence
-export function setKeys(persistence: Persistence, keys: PrivateKeyBundleV1) {
+export async function setKeys(
+  persistence: Persistence,
+  keys: PrivateKeyBundleV1,
+) {
   return persistence.setItem(`keys`, keys.encode());
 }
 

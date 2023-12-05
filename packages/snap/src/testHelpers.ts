@@ -1,6 +1,7 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { Wallet } from 'ethers';
-import { SnapMeta } from '.';
+
+import type { SnapMeta } from '.';
 
 export function newWallet() {
   return Wallet.createRandom();

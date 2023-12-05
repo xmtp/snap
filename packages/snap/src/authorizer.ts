@@ -1,5 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { XmtpEnv } from '@xmtp/xmtp-js';
+import type { XmtpEnv } from '@xmtp/xmtp-js';
+
 import { AUTHORIZATION_EXPIRY_MS } from './config';
 import storage from './storage';
 
