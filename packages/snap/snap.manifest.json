@@ -23,7 +23,8 @@
     "endowment:rpc": {
       "dapps": true,
       "snaps": false
-    }
+    },
+    "endowment:webassembly": {}
   },
   "manifestVersion": "0.1"
 }
