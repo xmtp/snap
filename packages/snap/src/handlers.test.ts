@@ -5,7 +5,6 @@ import { PrivateKeyBundleV1 } from '@xmtp/xmtp-js';
 
 import { buildRpcRequest, newWallet } from './testHelpers';
 import { base64Decode, base64Encode } from './utils';
-import { build } from 'protobufjs';
 
 const {
   InitKeystoreRequest,
