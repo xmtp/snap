@@ -1,10 +1,12 @@
+// eslint-disable-next-line import/no-unassigned-import
 import './polyfills';
-import { FunctionComponent, ReactNode, useContext } from 'react';
+import type { FunctionComponent, ReactNode } from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components';
-import { Footer, Header } from './components';
 
+import { Footer, Header } from './components';
 import { GlobalStyle } from './config/theme';
-import { ToggleThemeContext } from './Root';
+import { ToggleThemeContext } from './contexts/ToggleThemeContext';
 
 const Wrapper = styled.div`
   display: flex;
