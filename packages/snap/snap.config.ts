@@ -9,6 +9,9 @@ const config: SnapConfig = {
   },
   polyfills: true,
   bundler: 'webpack',
+  experimental: {
+    wasm: true,
+  },
   customizeWebpackConfig: (existing) =>
     merge(existing, {
       module: {
