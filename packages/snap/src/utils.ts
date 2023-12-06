@@ -11,7 +11,7 @@ import { KeyNotFoundError } from './errors';
 import { type SnapRequest, keystoreHandler } from './handlers';
 import SnapPersistence from './snapPersistence';
 
-const { b64Encode } = fetcher;
+const { b64Encode, b64Decode } = fetcher;
 
 // Mapping of keystore identifiers ($walletAddress/$env) to handlers
 const handlers = new Map<string, ReturnType<typeof keystoreHandler>>();
@@ -79,6 +79,10 @@ export function prettyWalletAddress(address: string) {
 // Base64 encodes the provided data
 export function base64Encode(data: Uint8Array) {
   return b64Encode(data, 0, data.length);
+}
+
+export function base64Decode(data: string): Uint8Array {
+  return b64Decode(data);
 }
 
 // Joins the address and env with a slash

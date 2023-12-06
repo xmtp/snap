@@ -4,7 +4,8 @@ import type { XmtpEnv } from '@xmtp/xmtp-js';
 import { PrivateKeyBundleV1 } from '@xmtp/xmtp-js';
 
 import { buildRpcRequest, newWallet } from './testHelpers';
-import { base64Encode } from './utils';
+import { base64Decode, base64Encode } from './utils';
+import { build } from 'protobufjs';
 
 const {
   InitKeystoreRequest,
@@ -193,6 +194,64 @@ describe('onRPCRequest', () => {
       const result = await response;
       expect((result.response as any).result).toBeUndefined();
       expect((result.response as any).error).toBeDefined();
+    });
+
+    it('talks to wasm', async () => {
+      const wallet = newWallet();
+      const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { request } = await installSnap();
+      await initKeystore(bundle, request);
+      const meta = {
+        walletAddress: bundle.identityKey.publicKey.walletSignatureAddress(),
+        env: ENV,
+      };
+
+      const originalData = new Uint8Array([1, 2, 3, 4]);
+
+      const encryptRequest = keystore.SelfEncryptRequest.encode({
+        requests: [
+          {
+            payload: originalData,
+          },
+        ],
+      }).finish();
+
+      const encryptResponse = request({
+        ...buildRpcRequest('selfEncrypt', base64Encode(encryptRequest), meta),
+      });
+
+      const resultPayload = ((await encryptResponse) as any).response.result
+        .res;
+      const decodedEncryptResponse = keystore.SelfEncryptResponse.decode(
+        base64Decode(resultPayload),
+      );
+
+      console.log(
+        'decodedEncryptResponse',
+        JSON.stringify(decodedEncryptResponse),
+      );
+
+      const decryptRequest = keystore.SelfDecryptRequest.encode({
+        requests: [
+          {
+            payload: decodedEncryptResponse.responses[0].result!.encrypted,
+          },
+        ],
+      }).finish();
+
+      const decryptResponse = request({
+        ...buildRpcRequest('selfDecrypt', base64Encode(decryptRequest), meta),
+      });
+
+      const decryptResultPayload = ((await decryptResponse) as any).response
+        .result.res;
+
+      const decryptResultProto =
+        keystore.DecryptResponse.decode(decryptResultPayload);
+      expect(decryptResultProto.responses[0].result?.decrypted).toEqual(
+        originalData,
+      );
     });
   });
 });
