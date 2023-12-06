@@ -20,7 +20,7 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "lint": "npm run lint:eslint && npm run lint:misc --check",
-    "lint:eslint": "eslint . --cache --ext js,ts",
+    "lint:eslint": "npm run lint:eslint --workspace=site && npm run lint:eslint --workspace=@xmtp/snap",
     "lint:fix": "npm run lint:eslint --fix && npm run lint:misc --write",
     "lint:misc": "prettier '**/*.md' '!**/CHANGELOG.md' '**/*.yml' --ignore-path .gitignore",
     "start": "concurrently \"npm start --workspace=site\" \"npm start --workspace=@xmtp/snap\"",

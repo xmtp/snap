@@ -33,9 +33,9 @@ export type SnapResponse = {
   res: string | string[];
 };
 
-type Codec<T> = {
-  decode(input: Reader | Uint8Array, length?: number): T;
-  encode(message: T, writer?: Writer): Writer;
+type Codec<MessageType> = {
+  decode(input: Reader | Uint8Array, length?: number): MessageType;
+  encode(message: MessageType, writer?: Writer): Writer;
 };
 
 export type SnapRPC<Req, Res> = {
@@ -54,7 +54,7 @@ export async function processProtoRequest<Req, Res>(
   }
 
   if (typeof request.req !== 'string') {
-    throw new Error(`Expected string request. Got: ${request.req}`);
+    throw new Error(`Expected string request. Got: ${typeof request.req}`);
   }
 
   const decodedRequest = rpc.req.decode(b64Decode(request.req));
@@ -62,7 +62,10 @@ export async function processProtoRequest<Req, Res>(
   return serializeResponse(rpc.res, result);
 }
 
-function serializeResponse<T>(codec: Codec<T>, res: T) {
+function serializeResponse<MessageType>(
+  codec: Codec<MessageType>,
+  res: MessageType,
+) {
   const responseBytes = codec.encode(res).finish();
   return { res: b64Encode(responseBytes, 0, responseBytes.length) };
 }
@@ -139,10 +142,10 @@ export async function getKeystoreStatus(
         return {
           status: KeystoreStatus.KEYSTORE_STATUS_INITIALIZED,
         };
-      } catch (e) {
+      } catch (error) {
         // Only swallow KeyNotFoundError and turn into a negative response
-        if (!(e instanceof KeyNotFoundError)) {
-          throw e;
+        if (!(error instanceof KeyNotFoundError)) {
+          throw error;
         }
         return {
           status: KeystoreStatus.KEYSTORE_STATUS_UNINITIALIZED,
@@ -152,7 +155,7 @@ export async function getKeystoreStatus(
   );
 }
 
-export function KeystoreHandler(backingKeystore: InMemoryKeystore) {
+export function keystoreHandler(backingKeystore: InMemoryKeystore) {
   const out: any = {};
   for (const [method, apiDef] of Object.entries(keystoreApiDefs)) {
     if (!(method in backingKeystore)) {

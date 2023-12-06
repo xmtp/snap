@@ -6,10 +6,12 @@ import { getLocalStorage, setLocalStorage } from './localStorage';
  * @returns True if the theme is "dark" otherwise, false.
  */
 export const getThemePreference = () => {
+  // eslint-disable-next-line no-restricted-globals
   if (typeof window === 'undefined') {
     return false;
   }
 
+  // eslint-disable-next-line no-restricted-globals
   const darkModeSystem = window?.matchMedia(
     '(prefers-color-scheme: dark)',
   ).matches;

@@ -1,6 +1,8 @@
 module.exports = {
   extends: ['../../.eslintrc.js'],
-
+  parserOptions: {
+    project: './tsconfig.eslint.json',
+  },
   overrides: [
     {
       files: ['**/*.{ts,tsx}'],
@@ -9,6 +11,5 @@ module.exports = {
       },
     },
   ],
-
   ignorePatterns: ['!.eslintrc.js', 'build/'],
 };

@@ -8,13 +8,13 @@ import {
 import type { XmtpEnv, Persistence } from '@xmtp/xmtp-js';
 
 import { KeyNotFoundError } from './errors';
-import { type SnapRequest, KeystoreHandler } from './handlers';
+import { type SnapRequest, keystoreHandler } from './handlers';
 import SnapPersistence from './snapPersistence';
 
 const { b64Encode } = fetcher;
 
 // Mapping of keystore identifiers ($walletAddress/$env) to handlers
-const handlers = new Map<string, ReturnType<typeof KeystoreHandler>>();
+const handlers = new Map<string, ReturnType<typeof keystoreHandler>>();
 
 // Gets the keys from provided persistence and converts to a class
 export async function getKeys(persistence: Persistence) {
@@ -47,7 +47,7 @@ export async function getHandler(address: string, env: XmtpEnv) {
     // This will throw if keys do not exist
     const keys = await getKeys(persistence);
     const keyStore = await InMemoryKeystore.create(keys, persistence);
-    handlers.set(key, KeystoreHandler(keyStore));
+    handlers.set(key, keystoreHandler(keyStore));
   }
 
   return handlers.get(key);

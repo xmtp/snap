@@ -1,8 +1,9 @@
-import { GatsbyConfig } from 'gatsby';
 import dotenv from 'dotenv';
+import type { GatsbyConfig } from 'gatsby';
 
 dotenv.config({
-  path: `.env.${process.env.NODE_ENV}`,
+  // eslint-disable-next-line no-restricted-globals, @typescript-eslint/no-non-null-assertion
+  path: `.env.${process.env.NODE_ENV!}`,
 });
 
 const config: GatsbyConfig = {
@@ -17,7 +18,9 @@ const config: GatsbyConfig = {
       options: {
         name: 'Template Snap',
         icon: 'src/assets/logo.svg',
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         theme_color: '#6F4CFF',
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         background_color: '#FFFFFF',
         display: 'standalone',
       },

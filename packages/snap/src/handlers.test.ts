@@ -1,6 +1,8 @@
-import { PrivateKeyBundleV1, XmtpEnv } from '@xmtp/xmtp-js';
-import { keystore } from '@xmtp/proto';
 import { installSnap } from '@metamask/snaps-jest';
+import { keystore } from '@xmtp/proto';
+import type { XmtpEnv } from '@xmtp/xmtp-js';
+import { PrivateKeyBundleV1 } from '@xmtp/xmtp-js';
+
 import { buildRpcRequest, newWallet } from './testHelpers';
 import { base64Encode } from './utils';
 
@@ -29,6 +31,7 @@ describe('onRPCRequest', () => {
         env: ENV,
       };
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
 
       // Check the status of a fresh instance
@@ -105,6 +108,7 @@ describe('onRPCRequest', () => {
     it('can return the public key', async () => {
       const wallet = newWallet();
       const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
       await initKeystore(bundle, request);
       const meta = {
@@ -123,6 +127,7 @@ describe('onRPCRequest', () => {
     it('returns an error if unknown handler is called', async () => {
       const wallet = newWallet();
       const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
       await initKeystore(bundle, request);
       const meta = {
@@ -139,6 +144,7 @@ describe('onRPCRequest', () => {
     it('prompts for authorization', async () => {
       const wallet = newWallet();
       const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
       await initKeystore(bundle, request);
       const meta = {
@@ -165,6 +171,7 @@ describe('onRPCRequest', () => {
     it('throws errors on rejected authorization', async () => {
       const wallet = newWallet();
       const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
       await initKeystore(bundle, request);
       const meta = {

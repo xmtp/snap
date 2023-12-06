@@ -34,11 +34,7 @@ export class Authorizer {
     this.cache = noCache ? undefined : new Map();
   }
 
-  private async getAuthRecord(
-    walletAddress: string,
-    env: XmtpEnv,
-    origin: string,
-  ) {
+  async getAuthRecord(walletAddress: string, env: XmtpEnv, origin: string) {
     const key = buildKey(walletAddress, env, origin);
     // If the record exists in the cache, return it
     if (this.cache?.has(key)) {
