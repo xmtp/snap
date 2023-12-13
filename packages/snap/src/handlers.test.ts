@@ -226,11 +226,6 @@ describe('onRPCRequest', () => {
         base64Decode(resultPayload),
       );
 
-      console.log(
-        'decodedEncryptResponse',
-        JSON.stringify(decodedEncryptResponse),
-      );
-
       const decryptRequest = keystore.SelfDecryptRequest.encode({
         requests: [
           {
@@ -244,10 +239,10 @@ describe('onRPCRequest', () => {
       });
 
       const decryptResultPayload = ((await decryptResponse) as any).response
-        .result.res;
-
-      const decryptResultProto =
-        keystore.DecryptResponse.decode(decryptResultPayload);
+        ?.result.res;
+      const decryptResultProto = keystore.DecryptResponse.decode(
+        base64Decode(decryptResultPayload),
+      );
       expect(decryptResultProto.responses[0].result?.decrypted).toEqual(
         originalData,
       );
