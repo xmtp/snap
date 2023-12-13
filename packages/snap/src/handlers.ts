@@ -1,22 +1,19 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import {
-  InMemoryKeystore,
-  Keystore,
-  PrivateKeyBundleV1,
-  keystoreApiDefs,
-} from '@xmtp/xmtp-js';
 import { fetcher, keystore as keystoreProto } from '@xmtp/proto';
-import { Reader, Writer } from 'protobufjs/minimal';
-import {
+import type {
   InitKeystoreRequest as InitKeystoreRequestType,
   InitKeystoreResponse as InitKeystoreResponseType,
   GetKeystoreStatusRequest as GetKeystoreStatusRequestType,
   GetKeystoreStatusResponse as GetKeystoreStatusResponseType,
   // eslint-disable-next-line import/extensions
 } from '@xmtp/proto/ts/dist/types/keystore_api/v1/keystore.pb';
-import { getKeys, getPersistence, setKeys } from './utils';
+import type { InMemoryKeystore, Keystore } from '@xmtp/xmtp-js';
+import { PrivateKeyBundleV1, keystoreApiDefs } from '@xmtp/xmtp-js';
+import type { Reader, Writer } from 'protobufjs/minimal';
+
+import type { SnapMeta } from '.';
 import { KeyNotFoundError } from './errors';
-import { SnapMeta } from '.';
+import { getKeys, getPersistence, setKeys } from './utils';
 
 const {
   GetKeystoreStatusResponse_KeystoreStatus: KeystoreStatus,
@@ -36,9 +33,9 @@ export type SnapResponse = {
   res: string | string[];
 };
 
-type Codec<T> = {
-  decode(input: Reader | Uint8Array, length?: number): T;
-  encode(message: T, writer?: Writer): Writer;
+type Codec<MessageType> = {
+  decode(input: Reader | Uint8Array, length?: number): MessageType;
+  encode(message: MessageType, writer?: Writer): Writer;
 };
 
 export type SnapRPC<Req, Res> = {
@@ -57,7 +54,7 @@ export async function processProtoRequest<Req, Res>(
   }
 
   if (typeof request.req !== 'string') {
-    throw new Error(`Expected string request. Got: ${request.req}`);
+    throw new Error(`Expected string request. Got: ${typeof request.req}`);
   }
 
   const decodedRequest = rpc.req.decode(b64Decode(request.req));
@@ -65,7 +62,10 @@ export async function processProtoRequest<Req, Res>(
   return serializeResponse(rpc.res, result);
 }
 
-function serializeResponse<T>(codec: Codec<T>, res: T) {
+function serializeResponse<MessageType>(
+  codec: Codec<MessageType>,
+  res: MessageType,
+) {
   const responseBytes = codec.encode(res).finish();
   return { res: b64Encode(responseBytes, 0, responseBytes.length) };
 }
@@ -142,10 +142,10 @@ export async function getKeystoreStatus(
         return {
           status: KeystoreStatus.KEYSTORE_STATUS_INITIALIZED,
         };
-      } catch (e) {
+      } catch (error) {
         // Only swallow KeyNotFoundError and turn into a negative response
-        if (!(e instanceof KeyNotFoundError)) {
-          throw e;
+        if (!(error instanceof KeyNotFoundError)) {
+          throw error;
         }
         return {
           status: KeystoreStatus.KEYSTORE_STATUS_UNINITIALIZED,
@@ -155,7 +155,7 @@ export async function getKeystoreStatus(
   );
 }
 
-export function KeystoreHandler(backingKeystore: InMemoryKeystore) {
+export function keystoreHandler(backingKeystore: InMemoryKeystore) {
   const out: any = {};
   for (const [method, apiDef] of Object.entries(keystoreApiDefs)) {
     if (!(method in backingKeystore)) {

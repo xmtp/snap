@@ -1,20 +1,20 @@
 /* eslint-disable jsdoc/require-jsdoc */
+import { privateKey, fetcher } from '@xmtp/proto';
 import {
   InMemoryKeystore,
-  Persistence,
   PrefixedPersistence,
   PrivateKeyBundleV1,
 } from '@xmtp/xmtp-js';
-import { privateKey, fetcher } from '@xmtp/proto';
-import type { XmtpEnv } from '@xmtp/xmtp-js';
-import SnapPersistence from './snapPersistence';
-import { type SnapRequest, KeystoreHandler } from './handlers';
-import { KeyNotFoundError } from './errors';
+import type { XmtpEnv, Persistence } from '@xmtp/xmtp-js';
 
-const { b64Encode } = fetcher;
+import { KeyNotFoundError } from './errors';
+import { type SnapRequest, keystoreHandler } from './handlers';
+import SnapPersistence from './snapPersistence';
+
+const { b64Encode, b64Decode } = fetcher;
 
 // Mapping of keystore identifiers ($walletAddress/$env) to handlers
-const handlers = new Map<string, ReturnType<typeof KeystoreHandler>>();
+const handlers = new Map<string, ReturnType<typeof keystoreHandler>>();
 
 // Gets the keys from provided persistence and converts to a class
 export async function getKeys(persistence: Persistence) {
@@ -32,7 +32,10 @@ export async function getKeys(persistence: Persistence) {
 }
 
 // Store the keys in the provided persistence
-export function setKeys(persistence: Persistence, keys: PrivateKeyBundleV1) {
+export async function setKeys(
+  persistence: Persistence,
+  keys: PrivateKeyBundleV1,
+) {
   return persistence.setItem(`keys`, keys.encode());
 }
 
@@ -44,7 +47,7 @@ export async function getHandler(address: string, env: XmtpEnv) {
     // This will throw if keys do not exist
     const keys = await getKeys(persistence);
     const keyStore = await InMemoryKeystore.create(keys, persistence);
-    handlers.set(key, KeystoreHandler(keyStore));
+    handlers.set(key, keystoreHandler(keyStore));
   }
 
   return handlers.get(key);
@@ -76,6 +79,10 @@ export function prettyWalletAddress(address: string) {
 // Base64 encodes the provided data
 export function base64Encode(data: Uint8Array) {
   return b64Encode(data, 0, data.length);
+}
+
+export function base64Decode(data: string): Uint8Array {
+  return b64Decode(data);
 }
 
 // Joins the address and env with a slash

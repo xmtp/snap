@@ -1,12 +1,16 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import './polyfills'; // eslint-disable-line import/no-unassigned-import
-import { OnRpcRequestHandler } from '@metamask/snaps-types';
+import {
+  heading,
+  panel,
+  text,
+  type OnRpcRequestHandler,
+} from '@metamask/snaps-sdk';
 import { type XmtpEnv } from '@xmtp/xmtp-js';
-import { heading, panel, text } from '@metamask/snaps-ui';
-import { getHandler, isSnapRequest, prettyWalletAddress } from './utils';
-import { initKeystore, getKeystoreStatus } from './handlers';
+
 import authorizer from './authorizer';
 import { GET_KEYSTORE_STATUS_METHOD, INIT_KEYSTORE_METHOD } from './config';
+import { initKeystore, getKeystoreStatus } from './handlers';
+import { getHandler, isSnapRequest, prettyWalletAddress } from './utils';
 
 export type SnapMeta = {
   walletAddress: string;

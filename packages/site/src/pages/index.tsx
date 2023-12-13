@@ -1,13 +1,7 @@
+import { Client, SnapProvider } from '@xmtp/xmtp-js';
 import { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
-import { Client, SnapProvider } from '@xmtp/xmtp-js';
-import { MetamaskActions, MetaMaskContext } from '../hooks';
-import {
-  connectSnap,
-  getSigner,
-  getSnap,
-  shouldDisplayReconnectButton,
-} from '../utils';
+
 import {
   ConnectButton,
   InstallFlaskButton,
@@ -16,7 +10,15 @@ import {
   Button,
 } from '../components';
 import { ListConversations } from '../components/ListConversations';
+import { ListUserPreferences } from '../components/ListUserPreferences';
 import { defaultSnapOrigin, getSnapParams } from '../config/snap';
+import { MetamaskActions, MetaMaskContext } from '../hooks';
+import {
+  connectSnap,
+  getSigner,
+  getSnap,
+  shouldDisplayReconnectButton,
+} from '../utils';
 
 const Container = styled.div`
   display: flex;
@@ -183,6 +185,7 @@ const Index = () => {
           }}
         />
         <ListConversations client={xmtp} />
+        <ListUserPreferences client={xmtp} />
         <Notice>
           <p>
             Please note that the <b>snap.manifest.json</b> and{' '}

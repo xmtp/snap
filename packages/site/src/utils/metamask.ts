@@ -1,10 +1,10 @@
 import { ethers } from 'ethers';
 /**
  * Detect if the wallet injecting the ethereum object is Flask.
- *
  * @returns True if the MetaMask version is Flask, false otherwise.
  */
 export const isFlask = async () => {
+  // eslint-disable-next-line no-restricted-globals
   const provider = window.ethereum;
   try {
     const clientVersion = await provider?.request({
@@ -20,9 +20,11 @@ export const isFlask = async () => {
 };
 
 export const getSigner = async () => {
+  // eslint-disable-next-line no-restricted-globals
   const provider = new ethers.BrowserProvider(window.ethereum);
 
   // Request account access if needed
+  // eslint-disable-next-line no-restricted-globals
   await window.ethereum.request({ method: 'eth_requestAccounts' });
 
   // Getting the signer from provider

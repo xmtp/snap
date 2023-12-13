@@ -1,7 +1,8 @@
-import { XmtpEnv } from '@xmtp/xmtp-js';
+import type { XmtpEnv } from '@xmtp/xmtp-js';
+
 import { Authorizer } from './authorizer';
-import { sleep } from './testHelpers';
 import { AUTHORIZATION_EXPIRY_MS } from './config';
+import { sleep } from './testHelpers';
 
 const WALLET_ADDRESS = '0x1234';
 const ENV = 'dev' as XmtpEnv;
@@ -32,6 +33,7 @@ describe('Authorizer', () => {
       throw new Error('unknown operation');
     });
 
+    // eslint-disable-next-line no-restricted-globals
     (global as any).snap = {
       request: mockRequest,
     };

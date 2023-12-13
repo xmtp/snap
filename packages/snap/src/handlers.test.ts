@@ -1,8 +1,10 @@
-import { PrivateKeyBundleV1, XmtpEnv } from '@xmtp/xmtp-js';
-import { keystore } from '@xmtp/proto';
 import { installSnap } from '@metamask/snaps-jest';
+import { keystore } from '@xmtp/proto';
+import type { XmtpEnv } from '@xmtp/xmtp-js';
+import { PrivateKeyBundleV1 } from '@xmtp/xmtp-js';
+
 import { buildRpcRequest, newWallet } from './testHelpers';
-import { base64Encode } from './utils';
+import { base64Decode, base64Encode } from './utils';
 
 const {
   InitKeystoreRequest,
@@ -29,6 +31,7 @@ describe('onRPCRequest', () => {
         env: ENV,
       };
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
 
       // Check the status of a fresh instance
@@ -105,6 +108,7 @@ describe('onRPCRequest', () => {
     it('can return the public key', async () => {
       const wallet = newWallet();
       const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
       await initKeystore(bundle, request);
       const meta = {
@@ -123,6 +127,7 @@ describe('onRPCRequest', () => {
     it('returns an error if unknown handler is called', async () => {
       const wallet = newWallet();
       const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
       await initKeystore(bundle, request);
       const meta = {
@@ -139,6 +144,7 @@ describe('onRPCRequest', () => {
     it('prompts for authorization', async () => {
       const wallet = newWallet();
       const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
       await initKeystore(bundle, request);
       const meta = {
@@ -165,6 +171,7 @@ describe('onRPCRequest', () => {
     it('throws errors on rejected authorization', async () => {
       const wallet = newWallet();
       const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       const { request } = await installSnap();
       await initKeystore(bundle, request);
       const meta = {
@@ -186,6 +193,61 @@ describe('onRPCRequest', () => {
       const result = await response;
       expect((result.response as any).result).toBeUndefined();
       expect((result.response as any).error).toBeDefined();
+    });
+
+    it('talks to wasm', async () => {
+      const wallet = newWallet();
+      const bundle = await PrivateKeyBundleV1.generate(wallet);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { request } = await installSnap();
+      await initKeystore(bundle, request);
+      const meta = {
+        walletAddress: bundle.identityKey.publicKey.walletSignatureAddress(),
+        env: ENV,
+      };
+
+      const originalData = new Uint8Array([1, 2, 3, 4]);
+
+      const encryptRequest = keystore.SelfEncryptRequest.encode({
+        requests: [
+          {
+            payload: originalData,
+          },
+        ],
+      }).finish();
+
+      const encryptResponse = request({
+        ...buildRpcRequest('selfEncrypt', base64Encode(encryptRequest), meta),
+      });
+
+      const resultPayload = ((await encryptResponse) as any).response.result
+        .res;
+      const decodedEncryptResponse = keystore.SelfEncryptResponse.decode(
+        base64Decode(resultPayload),
+      );
+
+      const decryptRequest = keystore.SelfDecryptRequest.encode({
+        requests: [
+          {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            payload: decodedEncryptResponse.responses[0].result!.encrypted,
+          },
+        ],
+      }).finish();
+
+      const decryptResponse = request({
+        ...buildRpcRequest('selfDecrypt', base64Encode(decryptRequest), meta),
+      });
+
+      const decryptResultPayload = ((await decryptResponse) as any).response
+        ?.result.res;
+      const decryptResultProto = keystore.DecryptResponse.decode(
+        base64Decode(decryptResultPayload),
+      );
+      // eslint-disable-next-line jest/prefer-strict-equal
+      expect(decryptResultProto.responses[0].result?.decrypted).toEqual(
+        originalData,
+      );
     });
   });
 });

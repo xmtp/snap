@@ -1,5 +1,5 @@
 import styled, { useTheme } from 'styled-components';
-import { ReactComponent as MetaMaskFox } from '../assets/metamask_fox.svg';
+
 import { MetaMask } from './MetaMask';
 import { PoweredBy } from './PoweredBy';
 
@@ -36,7 +36,6 @@ export const Footer = () => {
   return (
     <FooterWrapper>
       <PoweredByButton href="https://docs.metamask.io/" target="_blank">
-        <MetaMaskFox />
         <PoweredByContainer>
           <PoweredBy color={theme.colors.text.muted} />
           <MetaMask color={theme.colors.text.default} />

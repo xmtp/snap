@@ -20,31 +20,31 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "lint": "npm run lint:eslint && npm run lint:misc --check",
-    "lint:eslint": "eslint . --cache --ext js,ts",
+    "lint:eslint": "npm run lint:eslint --workspace=site && npm run lint:eslint --workspace=@xmtp/snap",
     "lint:fix": "npm run lint:eslint --fix && npm run lint:misc --write",
     "lint:misc": "prettier '**/*.md' '!**/CHANGELOG.md' '**/*.yml' --ignore-path .gitignore",
     "start": "concurrently \"npm start --workspace=site\" \"npm start --workspace=@xmtp/snap\"",
     "test": "npm test --workspace=@xmtp/snap"
   },
   "devDependencies": {
-    "@metamask/eslint-config": "^10.0.0",
-    "@metamask/eslint-config-jest": "^10.0.0",
-    "@metamask/eslint-config-nodejs": "^10.0.0",
-    "@metamask/eslint-config-typescript": "^10.0.0",
+    "@metamask/eslint-config": "^12.2.0",
+    "@metamask/eslint-config-jest": "^12.1.0",
+    "@metamask/eslint-config-nodejs": "^12.1.0",
+    "@metamask/eslint-config-typescript": "^12.1.0",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "concurrently": "^8.2.0",
-    "eslint": "^8.21.0",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^26.8.2",
-    "eslint-plugin-jsdoc": "^39.2.9",
+    "eslint-plugin-jest": "^27.6.0",
+    "eslint-plugin-jsdoc": "^43.0.7",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.18",
     "semantic-release": "^21.0.7",
-    "typescript": "^4.7.4"
+    "typescript": "^5.1.0"
   },
   "engines": {
     "node": ">=16.0.0"
