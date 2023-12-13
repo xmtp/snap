@@ -26,7 +26,7 @@
     "serve": "mm-snap serve",
     "start": "mm-snap watch --transpilationMode=localAndDeps",
     "pretest": "npm run build",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "release": {
     "branches": [
