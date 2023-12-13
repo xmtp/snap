@@ -229,6 +229,7 @@ describe('onRPCRequest', () => {
       const decryptRequest = keystore.SelfDecryptRequest.encode({
         requests: [
           {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             payload: decodedEncryptResponse.responses[0].result!.encrypted,
           },
         ],
@@ -243,6 +244,7 @@ describe('onRPCRequest', () => {
       const decryptResultProto = keystore.DecryptResponse.decode(
         base64Decode(decryptResultPayload),
       );
+      // eslint-disable-next-line jest/prefer-strict-equal
       expect(decryptResultProto.responses[0].result?.decrypted).toEqual(
         originalData,
       );

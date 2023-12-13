@@ -3,6 +3,10 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.eslint.json',
   },
+  rules: {
+    'spaced-comment': 'off',
+    'import/unambiguous': 'off',
+  },
   overrides: [
     {
       files: ['**/*.{ts,tsx}'],
