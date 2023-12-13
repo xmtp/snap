@@ -1,7 +1,8 @@
-import { Client } from '@xmtp/xmtp-js';
-import { Card } from './Card';
-import { Button } from './Buttons';
+import type { Client } from '@xmtp/xmtp-js';
 import { useCallback } from 'react';
+
+import { Button } from './Buttons';
+import { Card } from './Card';
 
 export const ListConversations = ({ client }: { client: Client | null }) => {
   const handleListConversations = useCallback(async () => {
@@ -10,11 +11,13 @@ export const ListConversations = ({ client }: { client: Client | null }) => {
     }
     try {
       const conversations = await client.conversations.list();
-      alert(`Conversations: 
-
-        ${conversations.map((c) => c.peerAddress).join('\n')}`);
-    } catch (e) {
-      console.error(e);
+      const conversationsString = conversations
+        .map((convo) => convo.peerAddress)
+        .join('\n');
+      console.log('CONVERSATIONS =======================');
+      console.log(conversationsString);
+    } catch (error) {
+      console.error(error);
     }
   }, [client]);
 

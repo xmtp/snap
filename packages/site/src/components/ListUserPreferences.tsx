@@ -5,17 +5,19 @@ import { Button } from './Buttons';
 import { Card } from './Card';
 
 export const ListUserPreferences = ({ client }: { client: Client | null }) => {
-  const handleClick = useCallback(async () => {
+  const handleList = useCallback(async () => {
     if (!client) {
       return;
     }
     try {
       const entries = await client.contacts.refreshConsentList();
-      alert(`Entries: 
-
-        ${entries.map((e) => `${e.key}:${e.value}`).join('\n')}`);
-    } catch (e) {
-      console.error(e);
+      const entriesString = entries
+        .map((entry) => `${entry.key}:${entry.permissionType}`)
+        .join('\n');
+      console.log('ENTRIES =======================');
+      console.log(entriesString);
+    } catch (error) {
+      console.error(error);
     }
   }, [client]);
 
@@ -29,9 +31,11 @@ export const ListUserPreferences = ({ client }: { client: Client | null }) => {
         title: 'List user preferences associated with connected client',
         description: 'List user preferences',
         button: (
-          <Button onClick={handleClick} disabled={!client}>
-            Execute
-          </Button>
+          <>
+            <Button onClick={handleList} disabled={!client}>
+              Execute
+            </Button>
+          </>
         ),
       }}
       disabled={!client}
