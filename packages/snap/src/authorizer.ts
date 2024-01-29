@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import type { XmtpEnv } from '@xmtp/xmtp-js';
 
 import { AUTHORIZATION_EXPIRY_MS } from './config';
@@ -13,6 +12,29 @@ type StoredAuthRecord = {
   isAuthorized: boolean;
   authorizedAt: string;
 };
+
+// Build the storage key for a given wallet address, environment, and origin.
+function buildKey(walletAddress: string, env: XmtpEnv, origin: string) {
+  return `authz/${walletAddress}/${env}/${origin}`;
+}
+
+function isStoredAuthRecord(value: any): value is StoredAuthRecord {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'isAuthorized' in value &&
+    'authorizedAt' in value &&
+    typeof (value as StoredAuthRecord).isAuthorized === 'boolean' &&
+    typeof (value as StoredAuthRecord).authorizedAt === 'string'
+  );
+}
+
+function toAuthRecord(record: StoredAuthRecord): AuthRecord {
+  return {
+    isAuthorized: record.isAuthorized,
+    authorizedAt: new Date(record.authorizedAt),
+  };
+}
 
 /**
  * The Authorizer singleton class wraps the Snap storage to persist user authorization
@@ -73,29 +95,6 @@ export class Authorizer {
     this.cache?.set(key, toAuthRecord(authRecord));
     await storage.setItem(key, authRecord);
   }
-}
-
-// Build the storage key for a given wallet address, environment, and origin.
-function buildKey(walletAddress: string, env: XmtpEnv, origin: string) {
-  return `authz/${walletAddress}/${env}/${origin}`;
-}
-
-function isStoredAuthRecord(value: any): value is StoredAuthRecord {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'isAuthorized' in value &&
-    'authorizedAt' in value &&
-    typeof value.isAuthorized === 'boolean' &&
-    typeof value.authorizedAt === 'string'
-  );
-}
-
-function toAuthRecord(record: StoredAuthRecord): AuthRecord {
-  return {
-    isAuthorized: record.isAuthorized,
-    authorizedAt: new Date(record.authorizedAt),
-  };
 }
 
 const authorizer = new Authorizer();

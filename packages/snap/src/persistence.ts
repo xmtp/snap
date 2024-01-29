@@ -1,6 +1,10 @@
-import type { Persistence } from '@xmtp/xmtp-js';
-
+import {
+  PrefixedPersistence,
+  type Persistence,
+  type XmtpEnv,
+} from '@xmtp/xmtp-js';
 import storage from './storage';
+import { buildKey } from './keys';
 
 const ENCODING = 'binary';
 
@@ -8,17 +12,25 @@ const ENCODING = 'binary';
 // Main difference is that XMTP persistence assumes all values are Uint8Arrays
 // and expects implementations to handle serialization
 export default class SnapPersistence implements Persistence {
+  // eslint-disable-next-line class-methods-use-this
   async getItem(key: string): Promise<Uint8Array | null> {
     const value = await storage.getItem(key);
     if (typeof value !== 'string') {
       return null;
     }
-    // eslint-disable-next-line no-restricted-globals
     return value ? Uint8Array.from(Buffer.from(value, ENCODING)) : null;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async setItem(key: string, value: Uint8Array): Promise<void> {
-    // eslint-disable-next-line no-restricted-globals
     await storage.setItem(key, Buffer.from(value).toString(ENCODING));
   }
+}
+
+// Create a prefixed version of the snap persistence.
+export function getPersistence(address: string, env: XmtpEnv) {
+  return new PrefixedPersistence(
+    `xmtp/${buildKey(address, env)}/`,
+    new SnapPersistence(),
+  );
 }

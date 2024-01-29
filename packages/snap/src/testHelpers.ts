@@ -1,7 +1,5 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { Wallet } from 'ethers';
-
-import type { SnapMeta } from '.';
+import type { SnapMeta } from './handlers';
 
 export function newWallet() {
   return Wallet.createRandom();
@@ -23,5 +21,7 @@ export function buildRpcRequest(
 }
 
 export async function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }

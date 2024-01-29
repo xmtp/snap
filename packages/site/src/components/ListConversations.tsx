@@ -14,7 +14,9 @@ export const ListConversations = ({ client }: { client: Client | null }) => {
       const conversationsString = conversations
         .map((convo) => convo.peerAddress)
         .join('\n');
+      // eslint-disable-next-line no-console
       console.log('CONVERSATIONS =======================');
+      // eslint-disable-next-line no-console
       console.log(conversationsString);
     } catch (error) {
       console.error(error);
@@ -31,7 +33,11 @@ export const ListConversations = ({ client }: { client: Client | null }) => {
         title: 'List conversations with connected client',
         description: 'List all conversations',
         button: (
-          <Button onClick={handleListConversations} disabled={!client}>
+          <Button
+            onClick={() => {
+              void handleListConversations();
+            }}
+            disabled={!client}>
             Execute
           </Button>
         ),

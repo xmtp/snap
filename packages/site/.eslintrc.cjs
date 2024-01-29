@@ -1,6 +1,5 @@
 module.exports = {
-  extends: ['../../.eslintrc.js'],
-  ignorePatterns: ['!.eslintrc.js', 'dist/'],
+  extends: ['custom'],
   parserOptions: {
     project: './tsconfig.eslint.json',
   },

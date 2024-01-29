@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
 
@@ -16,10 +16,10 @@ import { getThemePreference, setLocalStorage } from './utils';
 const Root: React.FC<PropsWithChildren> = ({ children }) => {
   const [darkTheme, setDarkTheme] = useState(getThemePreference());
 
-  const toggleTheme: ToggleTheme = () => {
+  const toggleTheme: ToggleTheme = useCallback(() => {
     setLocalStorage('theme', darkTheme ? 'light' : 'dark');
     setDarkTheme(!darkTheme);
-  };
+  }, [darkTheme]);
 
   return (
     <ToggleThemeContext.Provider value={toggleTheme}>

@@ -10,6 +10,7 @@ export type StorageProvider = {
 class SnapStorage implements StorageProvider {
   mutex = new Mutex();
 
+  // eslint-disable-next-line class-methods-use-this
   async getItem(key: string): Promise<Json> {
     const state = await snap.request({
       method: 'snap_manageState',

@@ -1,3 +1,4 @@
+import { describe, it, expect } from '@jest/globals';
 import { installSnap } from '@metamask/snaps-jest';
 import { keystore } from '@xmtp/proto';
 import type { XmtpEnv } from '@xmtp/xmtp-js';
@@ -61,7 +62,7 @@ describe('onRPCRequest', () => {
             env: ENV,
           }),
         ),
-      ).not.toRespondWithError();
+      ).not.toRespondWithError(undefined);
 
       const status = await request(
         buildRpcRequest(
@@ -138,7 +139,10 @@ describe('onRPCRequest', () => {
       const response = await request(
         buildRpcRequest('unknownHandler', null, meta),
       );
-      expect((response.response as any).error).toBeDefined();
+      expect('error' in response.response).toBe(true);
+      if ('error' in response.response) {
+        expect(response.response.error).toBeDefined();
+      }
     });
 
     it('prompts for authorization', async () => {
@@ -159,13 +163,16 @@ describe('onRPCRequest', () => {
       if (!('getInterface' in response)) {
         throw new Error('No dialog present');
       }
-      const ui = await (response as any).getInterface();
+      const ui = await response.getInterface();
       await ui.ok();
 
       expect(ui.type).toBe('confirmation');
       const result = await response;
-      expect((result.response as any).result).toBeDefined();
-      expect((result.response as any).error).toBeUndefined();
+      expect('result' in result.response).toBe(true);
+      if ('result' in result.response) {
+        expect(result.response.result).toBeDefined();
+      }
+      expect('error' in result.response).toBe(false);
     });
 
     it('throws errors on rejected authorization', async () => {
@@ -186,13 +193,18 @@ describe('onRPCRequest', () => {
       if (!('getInterface' in response)) {
         throw new Error('No confirmation present in Snap');
       }
-      const ui = await (response as any).getInterface();
-      await ui.cancel();
+      const ui = await response.getInterface();
+      if (ui.type === 'confirmation' || ui.type === 'prompt') {
+        await ui.cancel();
+      }
 
       expect(ui.type).toBe('confirmation');
       const result = await response;
-      expect((result.response as any).result).toBeUndefined();
-      expect((result.response as any).error).toBeDefined();
+      expect('result' in result.response).toBe(false);
+      expect('error' in result.response).toBe(true);
+      if ('error' in result.response) {
+        expect(result.response.error).toBeDefined();
+      }
     });
 
     it('talks to wasm', async () => {
@@ -216,38 +228,51 @@ describe('onRPCRequest', () => {
         ],
       }).finish();
 
-      const encryptResponse = request({
+      const encryptResponse = await request({
         ...buildRpcRequest('selfEncrypt', base64Encode(encryptRequest), meta),
       });
 
-      const resultPayload = ((await encryptResponse) as any).response.result
-        .res;
-      const decodedEncryptResponse = keystore.SelfEncryptResponse.decode(
-        base64Decode(resultPayload),
-      );
+      expect(
+        'response' in encryptResponse &&
+          'result' in encryptResponse.response &&
+          typeof encryptResponse.response.result === 'object' &&
+          encryptResponse.response.result !== null &&
+          'res' in encryptResponse.response.result,
+      ).toBe(true);
 
-      const decryptRequest = keystore.SelfDecryptRequest.encode({
-        requests: [
-          {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            payload: decodedEncryptResponse.responses[0].result!.encrypted,
-          },
-        ],
-      }).finish();
+      if (
+        'response' in encryptResponse &&
+        'result' in encryptResponse.response &&
+        typeof encryptResponse.response.result === 'object' &&
+        encryptResponse.response.result !== null &&
+        'res' in encryptResponse.response.result
+      ) {
+        const resultPayload = encryptResponse.response.result.res;
+        const decodedEncryptResponse = keystore.SelfEncryptResponse.decode(
+          base64Decode(JSON.stringify(resultPayload)),
+        );
+        const decryptRequest = keystore.SelfDecryptRequest.encode({
+          requests: [
+            {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              payload: decodedEncryptResponse.responses[0].result!.encrypted,
+            },
+          ],
+        }).finish();
 
-      const decryptResponse = request({
-        ...buildRpcRequest('selfDecrypt', base64Encode(decryptRequest), meta),
-      });
+        const decryptResponse = request({
+          ...buildRpcRequest('selfDecrypt', base64Encode(decryptRequest), meta),
+        });
 
-      const decryptResultPayload = ((await decryptResponse) as any).response
-        ?.result.res;
-      const decryptResultProto = keystore.DecryptResponse.decode(
-        base64Decode(decryptResultPayload),
-      );
-      // eslint-disable-next-line jest/prefer-strict-equal
-      expect(decryptResultProto.responses[0].result?.decrypted).toEqual(
-        originalData,
-      );
+        const decryptResultPayload = ((await decryptResponse) as any).response
+          ?.result.res;
+        const decryptResultProto = keystore.DecryptResponse.decode(
+          base64Decode(decryptResultPayload),
+        );
+        expect(decryptResultProto.responses[0].result?.decrypted).toEqual(
+          originalData,
+        );
+      }
     });
   });
 });

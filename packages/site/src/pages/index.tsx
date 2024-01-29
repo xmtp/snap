@@ -181,7 +181,14 @@ const Index = () => {
           content={{
             title: 'Connect XMTP',
             description: 'Manage the storage of the snap',
-            button: <Button onClick={connectXmtp}>Connect to XMTP</Button>,
+            button: (
+              <Button
+                onClick={() => {
+                  void connectXmtp();
+                }}>
+                Connect to XMTP
+              </Button>
+            ),
           }}
         />
         <ListConversations client={xmtp} />

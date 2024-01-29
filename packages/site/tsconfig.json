@@ -1,13 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "moduleResolution": "bundler",
-    "module": "esnext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
-  },
+  "extends": "@xmtp/tsconfig/site.json",
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

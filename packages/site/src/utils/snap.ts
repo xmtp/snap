@@ -6,12 +6,11 @@ import type { GetSnapsResponse, Snap } from '../types';
  * Get the installed snaps in MetaMask.
  * @returns The snaps installed in MetaMask.
  */
-export const getSnaps = async (): Promise<GetSnapsResponse> => {
+export const getSnaps = async (): Promise<GetSnapsResponse> =>
   // eslint-disable-next-line no-restricted-globals
-  return (await window.ethereum.request({
+  (await window.ethereum.request({
     method: 'wallet_getSnaps',
   })) as unknown as GetSnapsResponse;
-};
 
 /**
  * Connect a snap to MetaMask.
@@ -20,7 +19,7 @@ export const getSnaps = async (): Promise<GetSnapsResponse> => {
  */
 export const connectSnap = async (
   snapId: string = defaultSnapOrigin,
-  params: Record<'version' | string, unknown> = {},
+  params: Record<string, unknown> = {},
 ) => {
   // eslint-disable-next-line no-restricted-globals
   await window.ethereum.request({
@@ -45,6 +44,7 @@ export const getSnap = async (version?: string): Promise<Snap | undefined> => {
         snap.id === defaultSnapOrigin && (!version || snap.version === version),
     );
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log('Failed to obtain installed snap', error);
     return undefined;
   }

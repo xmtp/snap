@@ -14,7 +14,9 @@ export const ListUserPreferences = ({ client }: { client: Client | null }) => {
       const entriesString = entries
         .map((entry) => `${entry.key}:${entry.permissionType}`)
         .join('\n');
+      // eslint-disable-next-line no-console
       console.log('ENTRIES =======================');
+      // eslint-disable-next-line no-console
       console.log(entriesString);
     } catch (error) {
       console.error(error);
@@ -31,11 +33,13 @@ export const ListUserPreferences = ({ client }: { client: Client | null }) => {
         title: 'List user preferences associated with connected client',
         description: 'List user preferences',
         button: (
-          <>
-            <Button onClick={handleList} disabled={!client}>
-              Execute
-            </Button>
-          </>
+          <Button
+            onClick={() => {
+              void handleList();
+            }}
+            disabled={!client}>
+            Execute
+          </Button>
         ),
       }}
       disabled={!client}

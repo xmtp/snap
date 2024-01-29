@@ -40,6 +40,7 @@ describe('Authorizer', () => {
   });
 
   for (const useCache of [true, false]) {
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     it(`returns false when no record exists (cache ${useCache})`, async () => {
       const authorizer = new Authorizer(AUTHORIZATION_EXPIRY_MS, useCache);
       expect(await authorizer.isAuthorized(WALLET_ADDRESS, ENV, ORIGIN)).toBe(
@@ -47,6 +48,7 @@ describe('Authorizer', () => {
       );
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     it(`allows for authorization (cache: ${useCache})`, async () => {
       const authorizer = new Authorizer(AUTHORIZATION_EXPIRY_MS, useCache);
       await authorizer.authorize(WALLET_ADDRESS, ENV, ORIGIN);
@@ -55,6 +57,7 @@ describe('Authorizer', () => {
       );
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     it(`stores different authorization statuses for different origins (cache: ${useCache})`, async () => {
       const authorizer = new Authorizer(AUTHORIZATION_EXPIRY_MS, useCache);
       await authorizer.authorize(WALLET_ADDRESS, ENV, ORIGIN);
@@ -71,6 +74,7 @@ describe('Authorizer', () => {
       ).toBe(false);
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     it(`handles expiration (cache: ${useCache})`, async () => {
       const authorizer = new Authorizer(1, useCache);
       await authorizer.authorize(WALLET_ADDRESS, ENV, ORIGIN);
@@ -84,6 +88,7 @@ describe('Authorizer', () => {
       );
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     it(`allows for re-authorization after expiration (cache: ${useCache})`, async () => {
       const authorizer = new Authorizer(1, useCache);
       await authorizer.authorize(WALLET_ADDRESS, ENV, ORIGIN);

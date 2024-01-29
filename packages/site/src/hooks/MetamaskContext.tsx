@@ -1,12 +1,6 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  Reducer,
-  useEffect,
-  useReducer,
-} from 'react';
-import { Snap } from '../types';
+import type { Dispatch, PropsWithChildren, Reducer } from 'react';
+import { createContext, useEffect, useMemo, useReducer } from 'react';
+import type { Snap } from '../types';
 import { isFlask, getSnap } from '../utils';
 
 export type MetamaskState = {
@@ -22,9 +16,9 @@ const initialState: MetamaskState = {
 
 type MetamaskDispatch = { type: MetamaskActions; payload: any };
 
-export const MetaMaskContext = createContext<
-  [MetamaskState, Dispatch<MetamaskDispatch>]
->([
+type MetaMaskContextValue = [MetamaskState, Dispatch<MetamaskDispatch>];
+
+export const MetaMaskContext = createContext<MetaMaskContextValue>([
   initialState,
   () => {
     /* no op */
@@ -69,11 +63,7 @@ const reducer: Reducer<MetamaskState, MetamaskDispatch> = (state, action) => {
  * @param props.children - React component to be wrapped by the Provider.
  * @returns JSX.
  */
-export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
-  if (typeof window === 'undefined') {
-    return <>{children}</>;
-  }
-
+export const MetaMaskProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -94,11 +84,12 @@ export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
       });
     }
 
-    detectFlask();
+    void detectFlask();
 
     if (state.isFlask) {
-      detectSnapInstalled();
+      void detectSnapInstalled();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.isFlask, window.ethereum]);
 
   useEffect(() => {
@@ -120,8 +111,14 @@ export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [state.error]);
 
+  const value = useMemo<MetaMaskContextValue>(() => [state, dispatch], [state]);
+
+  if (typeof window === 'undefined') {
+    return <>{children}</>;
+  }
+
   return (
-    <MetaMaskContext.Provider value={[state, dispatch]}>
+    <MetaMaskContext.Provider value={value}>
       {children}
     </MetaMaskContext.Provider>
   );

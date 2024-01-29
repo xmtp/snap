@@ -1,10 +1,7 @@
-module.exports = {
+export default {
   preset: '@metamask/snaps-jest',
   roots: ['<rootDir>'],
-  testMatch: [
-    '**/__tests__/**/*.+(ts|tsx|js)',
-    '**/?(*.)+(spec|test).+(ts|tsx|js)',
-  ],
+  testMatch: ['**/?(*.)+(spec|test).+(ts|tsx|js)'],
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
