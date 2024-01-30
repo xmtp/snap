@@ -6,26 +6,70 @@ on:
   pull_request:
 
 jobs:
-  build-lint-test:
-    name: Build, Lint, and Test
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        node-version: [18.x]
+  prettier:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build
-      - run: npm run lint
-      - run: npm run test
-  all-jobs-pass:
-    name: All jobs pass
-    runs-on: ubuntu-20.04
-    needs:
-      - build-lint-test
+          node-version-file: ".nvmrc"
+          cache: "yarn"
+        env:
+          SKIP_YARN_COREPACK_CHECK: "1"
+      - name: Enable corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn
+      - name: Check code format
+        run: yarn format:check
+
+  lint:
+    runs-on: ubuntu-latest
     steps:
-      - run: echo "Great success!"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "yarn"
+        env:
+          SKIP_YARN_COREPACK_CHECK: "1"
+      - name: Enable corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn
+      - name: Lint
+        run: yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "yarn"
+        env:
+          SKIP_YARN_COREPACK_CHECK: "1"
+      - name: Enable corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn
+      - name: Run tests
+        run: yarn test
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "yarn"
+        env:
+          SKIP_YARN_COREPACK_CHECK: "1"
+      - name: Enable corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
