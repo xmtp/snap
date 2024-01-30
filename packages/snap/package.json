@@ -14,19 +14,18 @@
     "snap.manifest.json"
   ],
   "scripts": {
-    "build": "mm-snap build --transpilationMode=localAndDeps",
-    "build:clean": "npm run clean && npm run build",
-    "build:website": "node ./scripts/build-website.js",
-    "clean": "rimraf dist",
-    "lint": "npm run lint:eslint && npm run lint:misc --check",
-    "lint:eslint": "eslint . --cache --ext js,ts",
-    "lint:fix": "npm run lint:eslint -- --fix && npm run lint:misc -- --write",
-    "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
-    "prepublishOnly": "npm run build:clean",
+    "build": "yarn clean:lib && mm-snap build --transpilationMode=localAndDeps",
+    "clean": "rm -rf .turbo && rm -rf node_modules && yarn clean:lib",
+    "clean:lib": "rm -rf dist",
+    "dev": "yarn clean:lib && mm-snap watch --transpilationMode=localAndDeps",
+    "format": "yarn format:base -w .",
+    "format:base": "prettier --ignore-path ../../.gitignore",
+    "format:check": "yarn format:base -c .",
+    "lint": "eslint . --ignore-path ../../.gitignore",
+    "prepublishOnly": "yarn build",
     "serve": "mm-snap serve",
-    "start": "mm-snap watch --transpilationMode=localAndDeps",
-    "pretest": "npm run build",
-    "test": "jest --runInBand"
+    "pretest": "yarn build",
+    "test": "yarn build && jest --runInBand"
   },
   "release": {
     "branches": [
@@ -38,8 +37,8 @@
     ]
   },
   "dependencies": {
-    "@xmtp/proto": "^3.34.0",
-    "@xmtp/xmtp-js": "^11.3.0-beta.13",
+    "@xmtp/proto": "3.34.0",
+    "@xmtp/xmtp-js": "11.3.0-beta.13",
     "async-mutex": "^0.4.0",
     "buffer": "^6.0.3",
     "protobufjs": "^7.2.4"
@@ -60,8 +59,10 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-jsdoc": "^43.0.7",
+    "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
     "ethers": "^6.6.2",
     "jest": "^29.6.0",
     "prettier": "^2.7.1",
