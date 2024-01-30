@@ -4,14 +4,14 @@
   "private": true,
   "license": "(MIT-0 OR Apache-2.0)",
   "scripts": {
-    "build": "vite build",
-    "clean": "rimraf public",
-    "lint": "npm run lint:eslint && npm run lint:misc --check",
-    "lint:eslint": "eslint . --cache --ext js,ts",
-    "lint:fix": "npm run lint:eslint -- --fix && npm run lint:misc -- --write",
-    "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
-    "start": "vite",
-    "test": "echo TODO"
+    "build": "yarn clean:lib && vite build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && yarn clean:lib",
+    "clean:lib": "rm -rf dist",
+    "dev": "vite",
+    "format": "yarn format:base -w .",
+    "format:base": "prettier --ignore-path ../../.gitignore",
+    "format:check": "yarn format:base -c .",
+    "lint": "eslint . --ignore-path ../../.gitignore"
   },
   "browserslist": {
     "production": [
@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "@metamask/providers": "^9.0.0",
-    "@xmtp/proto": "^3.34.0",
-    "@xmtp/xmtp-js": "^11.3.0-beta.13",
+    "@xmtp/proto": "3.34.0",
+    "@xmtp/xmtp-js": "11.3.0-beta.13",
     "buffer": "^6.0.3",
     "ethers": "^6.6.2",
     "react": "^18.2.0",
@@ -54,6 +54,7 @@
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "@vitejs/plugin-react": "^4.2.0",
+    "babel-plugin-styled-components": "^2.1.4",
     "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "eslint": "^8.55.0",
@@ -61,8 +62,10 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-jsdoc": "^43.0.7",
+    "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
     "gatsby": "^4.25.7",
     "gatsby-plugin-manifest": "^4.24.0",
     "gatsby-plugin-styled-components": "^5.24.0",

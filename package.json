@@ -14,17 +14,16 @@
   "license": "(MIT-0 OR Apache-2.0)",
   "author": "",
   "workspaces": [
-    "packages/site",
-    "packages/snap"
+    "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
-    "lint": "npm run lint:eslint && npm run lint:misc --check",
-    "lint:eslint": "npm run lint:eslint --workspace=site && npm run lint:eslint --workspace=@xmtp/snap",
-    "lint:fix": "npm run lint:eslint --fix && npm run lint:misc --write",
-    "lint:misc": "prettier '**/*.md' '!**/CHANGELOG.md' '**/*.yml' --ignore-path .gitignore",
-    "start": "concurrently \"npm start --workspace=site\" \"npm start --workspace=@xmtp/snap\"",
-    "test": "npm test --workspace=@xmtp/snap"
+    "build": "turbo run build --filter='./packages/snap'",
+    "clean": "turbo run clean && rm -rf node_modules && yarn cache clean",
+    "format:check": "turbo run format:check",
+    "format": "turbo run format",
+    "lint": "FORCE_COLOR=1 turbo run lint --filter='./packages/snap'",
+    "dev": "turbo run dev",
+    "test": "FORCE_COLOR=1 turbo run test"
   },
   "devDependencies": {
     "@metamask/eslint-config": "^12.2.0",
@@ -44,9 +43,11 @@
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.18",
     "semantic-release": "^21.0.7",
+    "turbo": "^1.11.3",
     "typescript": "^5.1.0"
   },
   "engines": {
     "node": ">=16.0.0"
-  }
+  },
+  "packageManager": "yarn@4.1.0"
 }
