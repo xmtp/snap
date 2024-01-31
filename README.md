@@ -1,4 +1,4 @@
-# @xmtp/snap
+# @xmtp/snap-monorepo
 
 This repository contains the XMTP Snap, released via NPM here, as well as a small webapp to demo the functionality. It was generated using the [template-snap repository](https://github.com/MetaMask/template-snap-monorepo/generate)
 
@@ -32,26 +32,6 @@ The built-in Snap storage is used for three tasks:
 
 Both `2` and `3` are highly sensitive material. At no time should these materials be accessible outside the Snap (via RPCs, console.log, or any other mechanism). It should not be possible to manipulate the values in `1` outside of the mechanisms described in [Authentication](#authentication).
 
-## Getting Started
+## Contributing
 
-You can start both the snap and the example site by running:
-
-```shell
-npm install
-npm start
-```
-
-### Testing and Linting
-
-Run `npm test` to run the tests once.
-
-Run `npm run lint` to run the linter, or run `npm run lint:fix` to run the linter and fix any automatically fixable issues.
-
-### Releasing & Publishing
-
-This project uses [semantic-release](https://semantic-release.gitbook.io/semantic-release/v/beta/) to publish new versions of the Snap. For changes that modify the Snap itself (not the website), follow the [Angular Commit Conventions](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format) in your commits.
-
-## Notes
-
-- Babel is used for transpiling TypeScript to JavaScript. When building with the CLI,
-  `transpilationMode` must be set to `localAndDeps` to include `xmtp-js` in the transpilation, which is required for the Snap to build properly.
+See our [contribution guide](./CONTRIBUTING.md) to learn more about contributing to this project.

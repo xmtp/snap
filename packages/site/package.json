@@ -1,8 +1,8 @@
 {
-  "name": "site",
-  "version": "0.2.1",
+  "name": "@xmtp/snap-site",
+  "version": "0.0.0",
   "private": true,
-  "license": "(MIT-0 OR Apache-2.0)",
+  "license": "MIT",
   "scripts": {
     "build": "yarn clean:lib && vite build",
     "clean": "rm -rf .turbo && rm -rf node_modules && yarn clean:lib",
