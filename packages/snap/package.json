@@ -22,9 +22,7 @@
     "format:base": "prettier --ignore-path ../../.gitignore",
     "format:check": "yarn format:base -c .",
     "lint": "eslint . --ignore-path ../../.gitignore",
-    "prepublishOnly": "yarn build",
     "serve": "mm-snap serve",
-    "pretest": "yarn build",
     "test": "yarn build && jest --runInBand"
   },
   "release": {
