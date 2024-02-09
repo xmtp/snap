@@ -3,12 +3,12 @@
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "ES2015",
+    "moduleResolution": "Bundler",
     "useUnknownInCatchVariables": false,
     "sourceMap": true,
     "strict": true,
     "target": "ES2017"
   },
-  "exclude": ["**/__snapshots__/**", "**/test/**", "**/*.test.ts"]
+  "exclude": ["**/__snapshots__/**"]
 }
