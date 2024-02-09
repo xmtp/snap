@@ -5,7 +5,7 @@ import {
   text,
   type OnRpcRequestHandler,
 } from '@metamask/snaps-sdk';
-import { type XmtpEnv } from '@xmtp/xmtp-js';
+import { type XmtpEnv } from '@xmtp/xmtp-js/browser/bundler';
 
 import authorizer from './authorizer';
 import { GET_KEYSTORE_STATUS_METHOD, INIT_KEYSTORE_METHOD } from './config';
