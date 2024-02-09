@@ -1,15 +1,18 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { fetcher, keystore as keystoreProto } from '@xmtp/proto';
 import type {
-  InitKeystoreRequest as InitKeystoreRequestType,
-  InitKeystoreResponse as InitKeystoreResponseType,
-  GetKeystoreStatusRequest as GetKeystoreStatusRequestType,
-  GetKeystoreStatusResponse as GetKeystoreStatusResponseType,
-  // eslint-disable-next-line import/extensions
-} from '@xmtp/proto/ts/dist/types/keystore_api/v1/keystore.pb';
-import type { InMemoryKeystore, Keystore } from '@xmtp/xmtp-js';
-import { PrivateKeyBundleV1, keystoreApiDefs } from '@xmtp/xmtp-js';
-import type { Reader, Writer } from 'protobufjs/minimal';
+  InMemoryKeystore,
+  KeystoreApiEntries,
+  KeystoreRPCCodec,
+  SnapKeystoreApiDefs,
+  SnapKeystoreApiMethods,
+  SnapKeystoreInterface,
+  SnapKeystoreInterfaceRequestValues,
+} from '@xmtp/xmtp-js/browser/bundler';
+import {
+  PrivateKeyBundleV1,
+  keystoreApiDefs,
+} from '@xmtp/xmtp-js/browser/bundler';
 
 import type { SnapMeta } from '.';
 import { KeyNotFoundError } from './errors';
@@ -33,47 +36,46 @@ export type SnapResponse = {
   res: string | string[];
 };
 
-type Codec<MessageType> = {
-  decode(input: Reader | Uint8Array, length?: number): MessageType;
-  encode(message: MessageType, writer?: Writer): Writer;
-};
-
-export type SnapRPC<Req, Res> = {
-  req: Codec<Req> | null;
-  res: Codec<Res>;
-};
-
-export async function processProtoRequest<Req, Res>(
-  rpc: SnapRPC<Req, Res>,
+export async function processProtoRequest<
+  Method extends SnapKeystoreApiMethods,
+>(
+  method: Method,
+  rpc: SnapKeystoreApiDefs[Method],
   request: SnapRequest,
-  handler: (req?: Req) => Promise<Res>,
+  handler: (
+    req?: SnapKeystoreInterfaceRequestValues[Method],
+  ) => ReturnType<SnapKeystoreInterface[Method]>,
 ): Promise<SnapResponse> {
+  console.log('Processing request method', method);
+
   if (rpc.req === null) {
     const result = await handler();
-    return serializeResponse(rpc.res, result);
+    return serializeResponse(
+      rpc.res as SnapKeystoreApiDefs[Method]['res'],
+      result,
+    );
   }
 
   if (typeof request.req !== 'string') {
     throw new Error(`Expected string request. Got: ${typeof request.req}`);
   }
 
-  const decodedRequest = rpc.req.decode(b64Decode(request.req));
+  const decodedRequest = rpc.req.decode(
+    b64Decode(request.req),
+  ) as SnapKeystoreInterfaceRequestValues[Method];
   const result = await handler(decodedRequest);
   return serializeResponse(rpc.res, result);
 }
 
 function serializeResponse<MessageType>(
-  codec: Codec<MessageType>,
+  codec: KeystoreRPCCodec<MessageType>,
   res: MessageType,
 ) {
   const responseBytes = codec.encode(res).finish();
   return { res: b64Encode(responseBytes, 0, responseBytes.length) };
 }
 
-const initKeystoreRPC: SnapRPC<
-  InitKeystoreRequestType,
-  InitKeystoreResponseType
-> = {
+const initKeystoreRPC = {
   req: InitKeystoreRequest,
   res: InitKeystoreResponse,
 };
@@ -81,6 +83,7 @@ const initKeystoreRPC: SnapRPC<
 // Handler for `initKeystore` RPCs, which set the keys in the persistence layer
 export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
   return processProtoRequest(
+    'initKeystore',
     initKeystoreRPC,
     req,
     async (initKeystoreRequest) => {
@@ -105,15 +108,14 @@ export async function initKeystore(req: SnapRequest): Promise<SnapResponse> {
       );
       await setKeys(persistence, bundle);
 
-      return {};
+      return {
+        error: undefined,
+      };
     },
   );
 }
 
-const getKeystoreStatusRPC: SnapRPC<
-  GetKeystoreStatusRequestType,
-  GetKeystoreStatusResponseType
-> = {
+const getKeystoreStatusRPC = {
   req: GetKeystoreStatusRequest,
   res: GetKeystoreStatusResponse,
 };
@@ -124,6 +126,7 @@ export async function getKeystoreStatus(
   req: SnapRequest,
 ): Promise<SnapResponse> {
   return processProtoRequest(
+    'getKeystoreStatus',
     getKeystoreStatusRPC,
     req,
     async (getKeystoreStatusRequest) => {
@@ -157,18 +160,21 @@ export async function getKeystoreStatus(
 
 export function keystoreHandler(backingKeystore: InMemoryKeystore) {
   const out: any = {};
-  for (const [method, apiDef] of Object.entries(keystoreApiDefs)) {
+  for (const [method, apiDef] of Object.entries(
+    keystoreApiDefs,
+  ) as KeystoreApiEntries) {
     if (!(method in backingKeystore)) {
       throw new Error('no method found in keystore');
     }
 
     // eslint-disable-next-line no-loop-func
     out[method] = async (req: SnapRequest): Promise<SnapResponse> => {
-      const backingMethod = backingKeystore[method as keyof Keystore];
+      const backingMethod = backingKeystore[method];
       if (typeof backingMethod !== 'function') {
         throw new Error('not a function');
       }
       return processProtoRequest(
+        method,
         apiDef,
         req,
         backingMethod.bind(backingKeystore) as any,
