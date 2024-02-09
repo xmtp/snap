@@ -1,5 +1,5 @@
 {
-  "version": "0.2.1",
+  "version": "1.3.0",
   "description": "A Snap that securely stores your XMTP keys across apps",
   "proposedName": "Sign in with XMTP",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "https://github.com/xmtp/snap.git"
   },
   "source": {
-    "shasum": "ax7SLJYHvMBFzUG2SWGVve7Jur9xujigTCIk7tnzsIM=",
+    "shasum": "XJe/FF4kK9jpK01IKoDgrbBz/nHx4LMTaSewSfLiUjk=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
