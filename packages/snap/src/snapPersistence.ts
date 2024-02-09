@@ -1,4 +1,4 @@
-import type { Persistence } from '@xmtp/xmtp-js';
+import type { Persistence } from '@xmtp/xmtp-js/browser/bundler';
 
 import storage from './storage';
 

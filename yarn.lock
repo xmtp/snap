@@ -8413,7 +8413,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^5.33.0"
     "@vitejs/plugin-react": "npm:^4.2.0"
     "@xmtp/proto": "npm:3.34.0"
-    "@xmtp/xmtp-js": "npm:11.3.0-beta.13"
+    "@xmtp/xmtp-js": "npm:11.3.9"
     babel-plugin-styled-components: "npm:^2.1.4"
     buffer: "npm:^6.0.3"
     cross-env: "npm:^7.0.3"
@@ -8461,7 +8461,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^5.33.0"
     "@typescript-eslint/parser": "npm:^5.33.0"
     "@xmtp/proto": "npm:3.34.0"
-    "@xmtp/xmtp-js": "npm:11.3.0-beta.13"
+    "@xmtp/xmtp-js": "npm:11.3.9"
     async-mutex: "npm:^0.4.0"
     buffer: "npm:^6.0.3"
     eslint: "npm:^8.55.0"
@@ -8483,25 +8483,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xmtp/user-preferences-bindings-wasm@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "@xmtp/user-preferences-bindings-wasm@npm:0.2.1"
-  checksum: 10/4fc0c49781ae2ddba1f00099f1b9e1f866b93d274a49d91cdbfe6c2dafbe088a279890f7b2a1f3a4d5e0aa6d71993bea83f843b0591609a1df4bba3d7aa66f3a
+"@xmtp/user-preferences-bindings-wasm@npm:^0.3.5":
+  version: 0.3.5
+  resolution: "@xmtp/user-preferences-bindings-wasm@npm:0.3.5"
+  checksum: 10/a5a88e81d15c36f4ceb3c837652c09a6ec210f98b3ec6c9cdd9ab58a675540cf34073e9075813538432126178bb906ae4af8d88f15f9a124f508dd332696e843
   languageName: node
   linkType: hard
 
-"@xmtp/xmtp-js@npm:11.3.0-beta.13":
-  version: 11.3.0-beta.13
-  resolution: "@xmtp/xmtp-js@npm:11.3.0-beta.13"
+"@xmtp/xmtp-js@npm:11.3.9":
+  version: 11.3.9
+  resolution: "@xmtp/xmtp-js@npm:11.3.9"
   dependencies:
     "@noble/secp256k1": "npm:^1.5.2"
     "@xmtp/proto": "npm:^3.34.0"
-    "@xmtp/user-preferences-bindings-wasm": "npm:^0.2.1"
+    "@xmtp/user-preferences-bindings-wasm": "npm:^0.3.5"
     async-mutex: "npm:^0.4.0"
     elliptic: "npm:^6.5.4"
     ethers: "npm:^5.5.3"
+    js-sha3: "npm:^0.9.3"
     long: "npm:^5.2.0"
-  checksum: 10/59610f086b9c1beb983519d757fc568d9a22bcb3e6d16c1cf88a70c3bca9118cca7048f03e16e5e30a4e6271864e690745e73a128c31e12a65bceedc4b0e610e
+  checksum: 10/b593236c664936d875c2e6cc64d190a77611d70a541b048b64acb5e4b2b08792719e5f649ab73f0f8ae564091e1f7761aeaeb573bbe400f57c96a3d431821de3
   languageName: node
   linkType: hard
 
@@ -17408,6 +17409,13 @@ __metadata:
   version: 0.5.7
   resolution: "js-sha3@npm:0.5.7"
   checksum: 10/32885c7edb50fca04017bacada8e5315c072d21d3d35e071e9640fc5577e200076a4718e0b2f33d86ab704accb68d2ade44f1e2ca424cc73a5929b9129dab948
+  languageName: node
+  linkType: hard
+
+"js-sha3@npm:^0.9.3":
+  version: 0.9.3
+  resolution: "js-sha3@npm:0.9.3"
+  checksum: 10/8daacb93b18609a0dc081f2f6199b80a96df36f9975b4b9c7476ae92822e07100b9e1969fc76f4b58e703cd6175f0de7656a99cbb2335cfb554c66f988fbead5
   languageName: node
   linkType: hard
 

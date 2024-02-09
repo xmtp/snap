@@ -13,4 +13,7 @@ module.exports = {
       },
     ],
   },
+  moduleNameMapper: {
+    '@xmtp/xmtp-js/browser/bundler': '@xmtp/xmtp-js',
+  },
 };

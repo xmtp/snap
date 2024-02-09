@@ -4,8 +4,8 @@ import {
   InMemoryKeystore,
   PrefixedPersistence,
   PrivateKeyBundleV1,
-} from '@xmtp/xmtp-js';
-import type { XmtpEnv, Persistence } from '@xmtp/xmtp-js';
+} from '@xmtp/xmtp-js/browser/bundler';
+import type { XmtpEnv, Persistence } from '@xmtp/xmtp-js/browser/bundler';
 
 import { KeyNotFoundError } from './errors';
 import { type SnapRequest, keystoreHandler } from './handlers';
