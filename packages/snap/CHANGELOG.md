@@ -1,5 +1,11 @@
 # @xmtp/snap
 
+## 1.3.3
+
+### Patch Changes
+
+- 1ccd3a9: Add provenance when publishing (for real this time)
+
 ## 1.3.2
 
 ### Patch Changes
