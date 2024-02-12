@@ -1,6 +1,6 @@
 {
   "name": "@xmtp/snap",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Snap keystore implementation for XMTP",
   "repository": {
     "type": "git",
