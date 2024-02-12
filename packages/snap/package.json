@@ -4,8 +4,7 @@
   "description": "Snap keystore implementation for XMTP",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xmtp/snap.git",
-    "directory": "packages/snap"
+    "url": "https://github.com/xmtp/snap.git"
   },
   "license": "MIT",
   "main": "dist/bundle.js",
