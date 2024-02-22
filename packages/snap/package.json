@@ -70,7 +70,7 @@
     "typescript": "^5.1.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18"
   },
   "publishConfig": {
     "access": "public",
