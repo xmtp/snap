@@ -46,6 +46,8 @@ describe('onRPCRequest', () => {
       );
 
       // Make sure it shows as unititialized
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       expect(initialStatus).toRespondWith({
         res: base64Encode(
           GetKeystoreStatusResponse.encode({
@@ -61,6 +63,8 @@ describe('onRPCRequest', () => {
             env: ENV,
           }),
         ),
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
       ).not.toRespondWithError();
 
       const status = await request(
@@ -73,6 +77,8 @@ describe('onRPCRequest', () => {
         ),
       );
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       expect(status).toRespondWith({
         res: base64Encode(
           GetKeystoreStatusResponse.encode({
@@ -119,6 +125,8 @@ describe('onRPCRequest', () => {
       const publicKeyResponse = await request(
         buildRpcRequest('getPublicKeyBundle', null, meta),
       );
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       expect(publicKeyResponse).toRespondWith({
         res: base64Encode(bundle.getPublicKeyBundle().toBytes()),
       });
