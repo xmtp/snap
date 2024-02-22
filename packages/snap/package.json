@@ -51,6 +51,7 @@
     "@metamask/snaps-cli": "^5.1.1",
     "@metamask/snaps-jest": "^5.0.0",
     "@metamask/snaps-sdk": "^2.1.0",
+    "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "^8.56.0",
