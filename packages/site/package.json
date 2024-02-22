@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "@metamask/providers": "^9.0.0",
+    "@metamask/providers": "^14.0.2",
     "@xmtp/proto": "3.34.0",
     "@xmtp/xmtp-js": "11.3.9",
     "buffer": "^6.0.3",
