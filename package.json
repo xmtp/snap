@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@changesets/changelog-git": "^0.2.0",
-    "@changesets/cli": "patch:@changesets/cli@npm%3A2.27.1#~/.yarn/patches/@changesets-cli-npm-2.27.1-2cfd25f1c6.patch"
+    "@changesets/cli": "^2.27.1"
   },
   "devDependencies": {
     "@metamask/eslint-config": "^12.2.0",
