@@ -1,4 +1,4 @@
-import { merge, type SnapConfig } from '@metamask/snaps-cli';
+import type { SnapConfig } from '@metamask/snaps-cli';
 
 const config: SnapConfig = {
   input: './src/index.ts',
@@ -10,13 +10,6 @@ const config: SnapConfig = {
   bundler: 'webpack',
   experimental: {
     wasm: true,
-  },
-  customizeWebpackConfig: (baseConfig) => {
-    return merge(baseConfig, {
-      output: {
-        chunkFormat: 'commonjs',
-      },
-    });
   },
 };
 
