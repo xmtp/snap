@@ -11,7 +11,7 @@
     "dev": "turbo run dev",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
-    "lint": "FORCE_COLOR=1 turbo run lint --filter='./packages/snap'",
+    "lint": "FORCE_COLOR=1 turbo run lint",
     "publish": "yarn build && changeset publish",
     "test": "FORCE_COLOR=1 turbo run test",
     "typecheck": "turbo run typecheck"

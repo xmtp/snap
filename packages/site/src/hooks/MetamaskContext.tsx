@@ -1,12 +1,7 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  Reducer,
-  useEffect,
-  useReducer,
-} from 'react';
-import { Snap } from '../types';
+import type { Dispatch, ReactNode, Reducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
+
+import type { Snap } from '../types';
 import { isFlask, getSnap } from '../utils';
 
 export type MetamaskState = {
@@ -64,12 +59,12 @@ const reducer: Reducer<MetamaskState, MetamaskDispatch> = (state, action) => {
 
 /**
  * MetaMask context provider to handle MetaMask and snap status.
- *
  * @param props - React Props.
  * @param props.children - React component to be wrapped by the Provider.
  * @returns JSX.
  */
 export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
+  // eslint-disable-next-line no-restricted-globals
   if (typeof window === 'undefined') {
     return <>{children}</>;
   }
@@ -94,17 +89,21 @@ export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
       });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     detectFlask();
 
     if (state.isFlask) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       detectSnapInstalled();
     }
+    // eslint-disable-next-line no-restricted-globals
   }, [state.isFlask, window.ethereum]);
 
   useEffect(() => {
     let timeoutId: number;
 
     if (state.error) {
+      // eslint-disable-next-line no-restricted-globals
       timeoutId = window.setTimeout(() => {
         dispatch({
           type: MetamaskActions.SetError,
@@ -115,6 +114,7 @@ export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
 
     return () => {
       if (timeoutId) {
+        // eslint-disable-next-line no-restricted-globals
         window.clearTimeout(timeoutId);
       }
     };

@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import type { MetamaskState } from '../hooks';
 import { shouldDisplayReconnectButton } from '../utils';

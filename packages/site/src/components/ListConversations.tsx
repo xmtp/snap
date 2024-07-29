@@ -31,6 +31,7 @@ export const ListConversations = ({ client }: { client: Client | null }) => {
         title: 'List conversations with connected client',
         description: 'List all conversations',
         button: (
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           <Button onClick={handleListConversations} disabled={!client}>
             Execute
           </Button>
