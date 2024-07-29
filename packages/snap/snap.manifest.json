@@ -7,7 +7,7 @@
     "url": "https://github.com/xmtp/snap.git"
   },
   "source": {
-    "shasum": "MW0co9Fwy4/YqYFTS2UWZUek+UkXbZU0fsfLK//EY0o=",
+    "shasum": "vbCwJl0dEuqouDUTi/89JPEqSlfO4C7VUBI/mGdn7ps=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
