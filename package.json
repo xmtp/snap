@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@changesets/changelog-git": "^0.2.0",
-    "@changesets/cli": "^2.27.1"
+    "@changesets/cli": "^2.27.7"
   },
   "devDependencies": {
     "@metamask/eslint-config": "^12.2.0",

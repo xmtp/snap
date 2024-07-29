@@ -31,11 +31,11 @@
     "@xmtp/proto": "3.34.0",
     "@xmtp/xmtp-js": "11.3.9",
     "buffer": "^6.0.3",
-    "ethers": "^6.6.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-is": "^18.2.0",
-    "styled-components": "5.3.11",
+    "ethers": "^6.13.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-is": "^18.3.1",
+    "styled-components": "6.1.12",
     "vite-plugin-wasm": "^3.3.0"
   },
   "devDependencies": {
