@@ -25,6 +25,9 @@
     },
     "test": {
       "outputs": []
+    },
+    "typecheck": {
+      "outputs": []
     }
   }
 }
