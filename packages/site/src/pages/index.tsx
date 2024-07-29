@@ -1,6 +1,6 @@
 import { Client, SnapProvider } from '@xmtp/xmtp-js';
 import { useCallback, useContext, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import {
   ConnectButton,
@@ -107,9 +107,9 @@ const Index = () => {
         type: MetamaskActions.SetInstalled,
         payload: installedSnap,
       });
-    } catch (e) {
-      console.error(e);
-      dispatch({ type: MetamaskActions.SetError, payload: e });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: MetamaskActions.SetError, payload: error });
     }
   };
 
@@ -153,6 +153,7 @@ const Index = () => {
                 'Get started by connecting to and installing the example snap.',
               button: (
                 <ConnectButton
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onClick={handleConnectClick}
                   disabled={!state.isFlask}
                 />
@@ -169,6 +170,7 @@ const Index = () => {
                 'While connected to a local running snap this button will always be displayed in order to update the snap if a change is made.',
               button: (
                 <ReconnectButton
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onClick={handleConnectClick}
                   disabled={!state.installedSnap}
                 />
@@ -181,7 +183,10 @@ const Index = () => {
           content={{
             title: 'Connect XMTP',
             description: 'Manage the storage of the snap',
-            button: <Button onClick={connectXmtp}>Connect to XMTP</Button>,
+            button: (
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              <Button onClick={connectXmtp}>Connect to XMTP</Button>
+            ),
           }}
         />
         <ListConversations client={xmtp} />

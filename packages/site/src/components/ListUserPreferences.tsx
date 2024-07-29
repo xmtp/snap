@@ -32,6 +32,7 @@ export const ListUserPreferences = ({ client }: { client: Client | null }) => {
         description: 'List user preferences',
         button: (
           <>
+            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
             <Button onClick={handleList} disabled={!client}>
               Execute
             </Button>
