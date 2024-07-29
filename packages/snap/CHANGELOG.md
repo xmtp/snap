@@ -1,5 +1,11 @@
 # @xmtp/snap
 
+## 1.3.7
+
+### Patch Changes
+
+- 422be43: Upgrade dependencies
+
 ## 1.3.6
 
 ### Patch Changes
