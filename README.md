@@ -1,5 +1,16 @@
 # @xmtp/snap-monorepo
 
+![Status](https://img.shields.io/badge/Deprecated-brown)
+
+> [!CAUTION]
+> This XMTP V2 snap repo is no longer maintained.
+
+In the future, we may create a new snap for XMTP V3.
+
+The documentation below is provided for historical reference only.
+
+---
+
 This repository contains the XMTP Snap, released via NPM here, as well as a small webapp to demo the functionality. It was generated using the [template-snap repository](https://github.com/MetaMask/template-snap-monorepo/generate)
 
 ## Architecture
